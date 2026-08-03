@@ -108,7 +108,20 @@
 
   .ttl{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-  @media (prefers-reduced-motion:reduce){ .dot{ animation:none; } }
+  /* the newest catch waves hello: a quick rock on its feet, then a rest */
+  #rp-art .rp-wave{
+    transform-box:fill-box; transform-origin:50% 92%;
+    animation:rp-wave 3.2s ease-in-out infinite;
+  }
+  @keyframes rp-wave{
+    0%, 30%, 100%{ transform:rotate(0deg); }
+    5%{  transform:rotate(-8deg); }
+    12%{ transform:rotate(6deg);  }
+    19%{ transform:rotate(-5deg); }
+    25%{ transform:rotate(3deg);  }
+  }
+
+  @media (prefers-reduced-motion:reduce){ .dot, #rp-art .rp-wave{ animation:none; } }
 </style>
 
 <div id="rp-host">
@@ -214,15 +227,16 @@ var BOOKS = [
 
     // group-photo slots for each roster position: [x, y, size, depth].
     // Pikachu holds the front-center spot; later catches flank it, then
-    // fill the middle and back rows. Higher depth draws in front.
+    // fill the middle and back rows. Higher depth draws in front, and
+    // every deeper slot sits higher so each face clears the row ahead.
     var PHOTO = [
-      [100, 58, 80, 11],
-      [129, 61, 62, 10], [71, 61, 62, 9],
-      [152, 54, 52,  8], [48, 54, 52, 7],
-      [119, 36, 46,  4], [81, 36, 46, 3],
-      [170, 42, 44,  6], [30, 42, 44, 5],
-      [100, 30, 44,  2],
-      [147, 27, 40,  1], [53, 27, 40, 0]
+      [100, 60, 70, 11],
+      [144, 63, 56, 10], [56, 63, 56, 9],
+      [176, 50, 48,  8], [24, 50, 48, 7],
+      [122, 30, 44,  6], [78, 30, 44, 5],
+      [160, 22, 40,  4], [40, 22, 40, 3],
+      [100, 19, 38,  2],
+      [138, 17, 34,  1], [62, 17, 34, 0]
     ];
 
     var order = [], i;
@@ -249,6 +263,7 @@ var BOOKS = [
                               width:sz, height:sz, href:url,
                               preserveAspectRatio:"xMidYMid meet" });
       img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
+      if(i === team - 1) img.setAttribute("class", "rp-wave");
       g.appendChild(img);
     }
 
