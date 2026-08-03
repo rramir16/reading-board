@@ -83,6 +83,10 @@
   .reading li{ font-size:14px; font-weight:600; color:var(--mint); padding:2px 0; }
   /* "who's that pokemon" teaser: the catch this book will add when done */
   .reading .nx{ width:27px; height:27px; flex:none; margin-left:auto; align-self:center; }
+  .reading .nxq{
+    font-size:8.5px; letter-spacing:.20em; text-transform:uppercase;
+    color:var(--faint); font-weight:700; margin:3px 0 0; text-align:right;
+  }
   .dot{
     width:7px; height:7px; border-radius:50%; flex:none;
     background:var(--mint); align-self:center;
@@ -313,10 +317,12 @@ var BOOKS = [
             '<feFlood flood-color="' + NXCOL + '"/>' +
             '<feComposite in2="ring" operator="in"/></filter>' +
         '</svg>';
+      var teases = 0;
       html += '<section class="reading"><p class="lbl">Reading now</p>' + nxdefs + '<ul>' +
         reading.map(function(b, j){
           var idx = done.length + j, tease = "";
           if(idx < DEX.length){
+            teases++;
             var u = ART + DEX[idx] + ".svg";
             // inset the sprite so the dilated outline ring isn't clipped
             // at the edges of the thumbnail's viewBox
@@ -328,7 +334,9 @@ var BOOKS = [
               '</svg>';
           }
           return '<li><span class="dot"></span><span class="ttl">' + esc(b.title) + '</span>' + tease + '</li>';
-        }).join("") + '</ul></section>';
+        }).join("") + '</ul>' +
+        (teases ? '<p class="nxq">Who&rsquo;s that Pok&eacute;mon?</p>' : '') +
+        '</section>';
     }
     if(done.length){
       html += '<section class="done"><p class="lbl">Finished</p><ul>' +
