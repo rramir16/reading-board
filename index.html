@@ -317,10 +317,12 @@ var BOOKS = [
           var idx = done.length + j, tease = "";
           if(idx < DEX.length){
             var u = ART + DEX[idx] + ".svg";
+            // inset the sprite so the dilated outline ring isn't clipped
+            // at the edges of the thumbnail's viewBox
             tease = '<svg class="nx" viewBox="0 0 40 40">' +
-              '<image href="' + u + '" xlink:href="' + u + '" width="40" height="40" ' +
+              '<image href="' + u + '" xlink:href="' + u + '" x="3" y="3" width="34" height="34" ' +
                      'preserveAspectRatio="xMidYMid meet" filter="url(#rpnx-ghost)"/>' +
-              '<image href="' + u + '" xlink:href="' + u + '" width="40" height="40" ' +
+              '<image href="' + u + '" xlink:href="' + u + '" x="3" y="3" width="34" height="34" ' +
                      'preserveAspectRatio="xMidYMid meet" filter="url(#rpnx-outline)"/>' +
               '</svg>';
           }
