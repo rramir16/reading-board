@@ -80,6 +80,8 @@
   #rp-panel li{ display:flex; align-items:baseline; gap:7px; }
 
   .reading li{ font-size:14px; font-weight:600; color:var(--mint); padding:2px 0; }
+  /* "who's that pokemon" teaser: the catch this book will add when done */
+  .reading .nx{ width:27px; height:27px; flex:none; margin-left:auto; align-self:center; }
   .dot{
     width:7px; height:7px; border-radius:50%; flex:none;
     background:var(--mint); align-self:center;
@@ -295,9 +297,34 @@ var BOOKS = [
 
     var html = "";
     if(reading.length){
-      html += '<section class="reading"><p class="lbl">Reading now</p><ul>' +
-        reading.map(function(b){
-          return '<li><span class="dot"></span><span class="ttl">' + esc(b.title) + '</span></li>';
+      // "who's that pokemon" silhouettes: an SVG filter dilates the sprite's
+      // alpha and subtracts the original shape, leaving a solid outline ring
+      // over a faint flat silhouette of the catch this book will add.
+      var NXCOL = DARK ? "#C9D6DD" : "#46565F";
+      var nxdefs =
+        '<svg width="0" height="0" style="position:absolute">' +
+          '<filter id="rpnx-ghost">' +
+            '<feFlood flood-color="' + NXCOL + '" flood-opacity=".25"/>' +
+            '<feComposite in2="SourceAlpha" operator="in"/></filter>' +
+          '<filter id="rpnx-outline">' +
+            '<feMorphology in="SourceAlpha" operator="dilate" radius="1.8" result="fat"/>' +
+            '<feComposite in="fat" in2="SourceAlpha" operator="out" result="ring"/>' +
+            '<feFlood flood-color="' + NXCOL + '"/>' +
+            '<feComposite in2="ring" operator="in"/></filter>' +
+        '</svg>';
+      html += '<section class="reading"><p class="lbl">Reading now</p>' + nxdefs + '<ul>' +
+        reading.map(function(b, j){
+          var idx = done.length + j, tease = "";
+          if(idx < DEX.length){
+            var u = ART + DEX[idx] + ".svg";
+            tease = '<svg class="nx" viewBox="0 0 40 40">' +
+              '<image href="' + u + '" xlink:href="' + u + '" width="40" height="40" ' +
+                     'preserveAspectRatio="xMidYMid meet" filter="url(#rpnx-ghost)"/>' +
+              '<image href="' + u + '" xlink:href="' + u + '" width="40" height="40" ' +
+                     'preserveAspectRatio="xMidYMid meet" filter="url(#rpnx-outline)"/>' +
+              '</svg>';
+          }
+          return '<li><span class="dot"></span><span class="ttl">' + esc(b.title) + '</span>' + tease + '</li>';
         }).join("") + '</ul></section>';
     }
     if(done.length){
