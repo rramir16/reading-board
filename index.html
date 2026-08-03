@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rey's Summer Chapter Reading</title>
+</head>
+<body style="margin:0;background:#ffffff;">
+
+<style>
+  /* Give the tile a real height to fill, whether this runs as a full page
+     or as a pasted fragment inside DAKboard's sandbox iframe. */
+  html, body{ height:100%; margin:0; }
+
+  /* ---- palette: light (default, for a white DAKboard screen) ---- */
+  #rp-host{
+    --fg:#1A2730; --dim:#46565F; --faint:#6E7D87; --rule:rgba(0,0,0,.13);
+    --gold:#C08A12; --mint:#0E8C78;
+    --pulse:rgba(14,140,120,.45); --pulse0:rgba(14,140,120,0);
+    --panel-bg:transparent; --panel-bd:transparent;
+    position:relative; width:100%; height:100%;
+    min-height:300px; overflow:hidden;
+  }
+  /* ---- palette: dark ---- */
+  #rp-host.rp-dark{
+    --fg:#FFFFFF; --dim:rgba(255,255,255,.72); --faint:rgba(255,255,255,.42);
+    --rule:rgba(255,255,255,.14);
+    --gold:#F2C14E; --mint:#7FE3CB;
+    --pulse:rgba(127,227,203,.55); --pulse0:rgba(127,227,203,0);
+    --panel-bg:rgba(8,16,22,.78); --panel-bd:rgba(255,255,255,.10);
+  }
+  /* ---- optional soft card behind the tile ---- */
+  #rp-host.rp-card{ --panel-bg:rgba(0,0,0,.035); --panel-bd:rgba(0,0,0,.09); }
+  #rp-host.rp-dark.rp-card{ --panel-bg:rgba(8,16,22,.78); --panel-bd:rgba(255,255,255,.10); }
+
+  #rp-stage{
+    position:absolute; top:50%; left:50%;
+    width:420px; margin-left:-210px;
+    transform-origin:center center;
+  }
+
+  #rp-panel{
+    width:100%; box-sizing:border-box;
+    padding:16px 20px 14px; border-radius:16px;
+    background:var(--panel-bg); border:1px solid var(--panel-bd);
+    color:var(--fg);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    display:flex; flex-direction:column;
+  }
+
+  #rp-panel .eyebrow{
+    font-size:9px; letter-spacing:.20em; text-transform:uppercase;
+    color:var(--faint); font-weight:700; margin:0 0 9px;
+  }
+
+  .tally{ display:flex; align-items:center; gap:10px; margin-bottom:2px; }
+  .tally .num{
+    font-family:Georgia,"DejaVu Serif",serif;
+    font-size:40px; font-weight:700; line-height:.9; color:var(--gold);
+  }
+  #rp-host.rp-dark .tally .num{ text-shadow:0 0 18px rgba(242,193,78,.35); }
+  .tally .cap{
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--dim); font-weight:700; line-height:1.3;
+  }
+  .tally .cap i{ display:block; font-style:normal; color:var(--faint); }
+
+  #rp-art{ margin:2px 0 6px; text-align:center; }
+  #rp-art svg{ width:200px; height:104px; }
+
+  .lbl{
+    font-size:8.5px; letter-spacing:.20em; text-transform:uppercase;
+    color:var(--faint); font-weight:700; margin:0 0 4px;
+    display:flex; align-items:center; gap:7px;
+  }
+  .lbl::after{ content:""; flex:1; height:1px; background:var(--rule); }
+
+  #rp-panel section{ margin-bottom:9px; }
+  #rp-panel section:last-child{ margin-bottom:0; }
+  #rp-panel ul{ list-style:none; margin:0; padding:0; }
+  #rp-panel li{ display:flex; align-items:baseline; gap:7px; }
+
+  .reading li{ font-size:14px; font-weight:600; color:var(--mint); padding:2px 0; }
+  .dot{
+    width:7px; height:7px; border-radius:50%; flex:none;
+    background:var(--mint); align-self:center;
+    animation:rp-pulse 2.4s ease-out infinite;
+  }
+  @keyframes rp-pulse{
+    0%{ box-shadow:0 0 0 0 var(--pulse); }
+    70%{ box-shadow:0 0 0 7px var(--pulse0); }
+    100%{ box-shadow:0 0 0 0 var(--pulse0); }
+  }
+
+  .done li{
+    font-family:Georgia,"DejaVu Serif",serif;
+    font-style:italic; font-weight:700; font-size:13px;
+    color:var(--gold); padding:1px 0;
+  }
+  .done .st{ font-style:normal; font-size:10px; flex:none; line-height:1; }
+  #rp-host.rp-dark .done .st{ text-shadow:0 0 8px rgba(242,193,78,.5); }
+
+  .todo li{ font-size:11.5px; color:var(--dim); padding:.5px 0; opacity:.88; }
+  #rp-host.rp-dark .todo li{ opacity:.72; }
+  .todo .tick{
+    width:7px; height:7px; flex:none; align-self:center;
+    border:1.2px solid var(--faint); border-radius:2px;
+  }
+
+  .ttl{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  @media (prefers-reduced-motion:reduce){ .dot{ animation:none; } }
+</style>
+
+<div id="rp-host">
+  <div id="rp-stage">
+    <div id="rp-panel">
+      <p class="eyebrow">Rey&rsquo;s Summer Chapter Reading</p>
+      <div class="tally">
+        <span class="num" id="rp-num">0</span>
+        <span class="cap">Books<i>finished</i></span>
+      </div>
+      <div id="rp-art"></div>
+      <div id="rp-lists"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====================================================================
+   1. THEME  -- "light" for a white screen, "dark" for a dark one.
+   2. CARD   -- true draws a faint card behind the tile, false blends in.
+   3. BOOKS  -- status: "reading" | "done" | "todo"
+                The crown gains a jewel for every book marked "done".
+   ==================================================================== */
+
+var THEME = "light";
+var CARD  = false;
+
+var BOOKS = [
+  { title: "Hilda and the Hidden People",        status: "reading" },
+
+  { title: "Juana & Lucas",                      status: "done" },
+  { title: "Ramona and Her Father",              status: "done" },
+
+  { title: "Ways to Make Sunshine",              status: "todo" },
+  { title: "Because of Winn-Dixie",              status: "todo" },
+  { title: "Odder",                              status: "todo" },
+  { title: "Ghost",                              status: "todo" },
+  { title: "Front Desk",                         status: "todo" },
+  { title: "When Stars Are Scattered",           status: "todo" },
+  { title: "Where the Mountain Meets the Moon",  status: "todo" },
+  { title: "The Mona Lisa Vanishes",             status: "todo" },
+  { title: "What Was the Underground Railroad?", status: "todo" }
+];
+
+/* ==================================================================== */
+
+(function(){
+
+  var NS = "http://www.w3.org/2000/svg";
+  var DARK = (THEME === "dark");
+
+  var SLOTS = [
+    [100,77,6.5],[100,22,4.6],[86,77,5.6],[114,77,5.6],
+    [78,31,4.1],[122,31,4.1],[72,77,5.1],[128,77,5.1],
+    [56,41,3.6],[144,41,3.6],[58,77,4.6],[142,77,4.6],
+    [93,77,3.4],[107,77,3.4],[65,77,3.4],[135,77,3.4]
+  ];
+  var GEMS = ["#D6304B","#3566C4","#1F9E6C","#8A52CC","#E85F22","#1FA9BE"];
+  var SPIKES = "M52 70 L56 38 L67 60 L78 28 L89 58 L100 18 " +
+               "L111 58 L122 28 L133 60 L144 38 L148 70 Z";
+
+  var STAR_FILL = DARK ? "#F2C14E" : "#C08A12";
+  var EDGE      = DARK ? "none"    : "#A8760C";   // outline so gold reads on white
+
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  function el(tag, attrs){
+    var n = document.createElementNS(NS, tag);
+    for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function drawCrown(n){
+    var art = document.getElementById("rp-art");
+    art.innerHTML = "";
+    var svg = el("svg", { viewBox: "0 0 200 104" });
+
+    var defs = document.createElementNS(NS, "defs");
+    defs.innerHTML =
+      '<radialGradient id="rprays">' +
+        '<stop offset="0" stop-color="#E8B23A" stop-opacity="' + (DARK ? ".30" : ".26") + '"/>' +
+        '<stop offset="1" stop-color="#E8B23A" stop-opacity="0"/></radialGradient>';
+    svg.appendChild(defs);
+
+    if(n >= 9) svg.appendChild(el("circle", { cx:100, cy:58, r:52, fill:"url(#rprays)" }));
+
+    var stroke = (EDGE === "none")
+      ? {}
+      : { stroke:EDGE, "stroke-width":1, "stroke-linejoin":"round" };
+
+    var spikes = el("path", { d:SPIKES, fill:"#E3AE38" });
+    for(var a in stroke) spikes.setAttribute(a, stroke[a]);
+    svg.appendChild(spikes);
+
+    var band = el("rect", { x:50, y:68, width:100, height:22, rx:4, fill:"#F2C14E" });
+    for(var b in stroke) band.setAttribute(b, stroke[b]);
+    svg.appendChild(band);
+
+    svg.appendChild(el("rect", { x:50.8, y:68.8, width:98.4, height:4, rx:2,
+                                 fill:"#F8D77E", opacity:.8 }));
+    svg.appendChild(el("rect", { x:50.8, y:85, width:98.4, height:2.6, rx:1.3,
+                                 fill:"#C79325", opacity:.55 }));
+
+    if(n >= 6){
+      for(var x = 57; x < 148; x += 13){
+        svg.appendChild(el("circle", { cx:x, cy:86.8, r:1.9, fill:"#FFF6E0",
+                                       stroke:"#C79325", "stroke-width":.4 }));
+      }
+    }
+
+    for(var i = 0; i < n && i < SLOTS.length; i++){
+      var S = SLOTS[i], r = S[2], newest = (i === n - 1);
+      if(newest){
+        svg.appendChild(el("circle", { cx:S[0], cy:S[1], r:r + 2.6, fill:"none",
+                                       stroke:STAR_FILL, "stroke-width":1.4, opacity:.85 }));
+      }
+      svg.appendChild(el("circle", { cx:S[0], cy:S[1], r:r, fill:GEMS[i % GEMS.length],
+                                     stroke:"rgba(0,0,0,.22)", "stroke-width":.5 }));
+      svg.appendChild(el("circle", {
+        cx:(S[0] - r * 0.30).toFixed(1), cy:(S[1] - r * 0.35).toFixed(1),
+        r:(r * 0.28).toFixed(1), fill:"#fff", opacity:.55
+      }));
+    }
+    art.appendChild(svg);
+  }
+
+  function render(){
+    var host = document.getElementById("rp-host");
+    if(DARK) host.className += " rp-dark";
+    if(CARD) host.className += " rp-card";
+
+    var reading = BOOKS.filter(function(b){ return b.status === "reading"; });
+    var done    = BOOKS.filter(function(b){ return b.status === "done"; });
+    var todo    = BOOKS.filter(function(b){ return b.status === "todo"; });
+
+    document.getElementById("rp-num").textContent = done.length;
+
+    drawCrown(done.length);
+
+    var html = "";
+    if(reading.length){
+      html += '<section class="reading"><p class="lbl">Reading now</p><ul>' +
+        reading.map(function(b){
+          return '<li><span class="dot"></span><span class="ttl">' + esc(b.title) + '</span></li>';
+        }).join("") + '</ul></section>';
+    }
+    if(done.length){
+      html += '<section class="done"><p class="lbl">Finished</p><ul>' +
+        done.map(function(b){
+          return '<li><span class="st">&#9733;</span><span class="ttl">' + esc(b.title) +
+                 '</span><span class="st">&#9733;</span></li>';
+        }).join("") + '</ul></section>';
+    }
+    if(todo.length){
+      html += '<section class="todo"><p class="lbl">Still to come</p><ul>' +
+        todo.map(function(b){
+          return '<li><span class="tick"></span><span class="ttl">' + esc(b.title) + '</span></li>';
+        }).join("") + '</ul></section>';
+    }
+    document.getElementById("rp-lists").innerHTML = html;
+  }
+
+  function fit(){
+    var stage = document.getElementById("rp-stage");
+    // measure the tile at its natural height, whatever the list length
+    stage.style.transform = "none";
+    var H = stage.offsetHeight;
+    stage.style.marginTop = (-H / 2) + "px";
+
+    var box = document.getElementById("rp-host").getBoundingClientRect();
+    var w = box.width  || window.innerWidth;
+    var h = box.height || window.innerHeight;
+    if(h < 60) h = window.innerHeight;
+
+    stage.style.transform = "scale(" + Math.min(w / 420, h / H) + ")";
+  }
+
+  render();
+  fit();
+  window.addEventListener("resize", fit);
+  setInterval(fit, 60000);
+
+})();
+</script>
+
+</body>
+</html>
