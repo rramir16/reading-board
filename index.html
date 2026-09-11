@@ -194,6 +194,29 @@ var BOOKS = [
     "psyduck", "togepi", "snorlax",  "meowth",     "ditto",     "gengar"
   ];
 
+  /* Rey's idea: her Eevee changes into one of its evolutions each day.
+     The form comes from the calendar date rather than chance, so every
+     reload on a given day shows the same one and the order is easy to
+     predict. The day is measured from ROTATE_HOUR, not midnight, so the
+     swap happens while she's asleep and the board looks new at breakfast. */
+  var ROTATE_HOUR = 3;
+  var EEVEE = [
+    "eevee",   "vaporeon", "jolteon", "flareon", "espeon",
+    "umbreon", "leafeon",  "glaceon", "sylveon"
+  ];
+
+  function rotationDay(){
+    var d = new Date(Date.now() - ROTATE_HOUR * 3600000);
+    // count whole days off the shifted *local* calendar date, so the form
+    // advances exactly once a day across timezones and DST changes
+    return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+  }
+
+  // every other slot is fixed; only Eevee's changes with the day
+  function spriteFor(i){
+    return DEX[i] === "eevee" ? EEVEE[rotationDay() % EEVEE.length] : DEX[i];
+  }
+
   function esc(s){
     return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
@@ -267,7 +290,7 @@ var BOOKS = [
     for(var k = 0; k < order.length; k++){
       i = order[k];
       var Q = PHOTO[i], sz = Q[2];
-      var url = ART + DEX[i] + ".svg";
+      var url = ART + spriteFor(i) + ".svg";
       var img = el("image", { x:(Q[0] - sz / 2).toFixed(1), y:(Q[1] - sz / 2).toFixed(1),
                               width:sz, height:sz, href:url,
                               preserveAspectRatio:"xMidYMid meet" });
@@ -291,8 +314,8 @@ var BOOKS = [
 
   function render(){
     var host = document.getElementById("rp-host");
-    if(DARK) host.className += " rp-dark";
-    if(CARD) host.className += " rp-card";
+    // assigned, not appended: render() re-runs when the day rolls over
+    host.className = (DARK ? "rp-dark " : "") + (CARD ? "rp-card" : "");
 
     var reading = BOOKS.filter(function(b){ return b.status === "reading"; });
     var done    = BOOKS.filter(function(b){ return b.status === "done"; });
@@ -325,7 +348,7 @@ var BOOKS = [
           var idx = done.length + j, tease = "";
           if(idx < DEX.length){
             teases++;
-            var u = ART + DEX[idx] + ".svg";
+            var u = ART + spriteFor(idx) + ".svg";
             // inset the sprite so the dilated outline ring isn't clipped
             // at the edges of the thumbnail's viewBox
             tease = '<svg class="nx" viewBox="0 0 40 40">' +
@@ -371,10 +394,16 @@ var BOOKS = [
     stage.style.transform = "scale(" + Math.min(w / 420, h / H) + ")";
   }
 
+  var shownDay = rotationDay();
+
   render();
   fit();
   window.addEventListener("resize", fit);
-  setInterval(fit, 60000);
+  setInterval(function(){
+    // a wall display is never reloaded, so pick up the new form on its own
+    if(rotationDay() !== shownDay){ shownDay = rotationDay(); render(); }
+    fit();
+  }, 60000);
 
 })();
 </script>
