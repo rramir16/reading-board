@@ -160,3 +160,20 @@ which DAKboard refreshes more often through its native integration.
   stale responses show up.
 - **Board shows homework late.** Cron interval plus DAKboard poll; both
   are tunable, and Phase 2 removes most of the DAKboard-side delay.
+
+## Status
+
+Scaffolded on this branch, waiting on deck access to tune the parser:
+
+| File | Purpose |
+| --- | --- |
+| `.github/workflows/homework.yml` | Scheduled job (every 2h, weekdays, 8am-8pm ET) that fetches, parses, and commits `homework.ics` when it changed |
+| `scripts/fetch_deck.py` | Reads the deck as text: public export URL, or the Slides API when the three `GOOGLE_*` secrets are set |
+| `scripts/homework_to_ics.py` | Parser and ICS writer; `TIMEZONE`, `SUMMARY_PREFIX`, and the date window are constants at the top |
+| `tests/fixtures/sample-deck.txt` | Stand-in deck text; replace with a real export once the deck is readable |
+| `tests/test_parser.py` | Pins the parser's behaviour; runs in the workflow before every fetch |
+
+Once the deck is readable: run the workflow by hand from the Actions tab,
+download the `deck-text` artifact, copy it over the fixture, adjust the
+parser and tests until the output matches the slides, then add the Pages
+URL to DAKboard.
