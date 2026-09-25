@@ -2,6 +2,11 @@
 """Turn the deck's plain text into homework.ics (and homework.json).
 
     python3 scripts/homework_to_ics.py deck.txt homework.ics [homework.json]
+    python3 scripts/homework_to_ics.py --from-json homework.json homework.ics
+
+The second form skips the parser: something else (a Claude Routine reading
+the deck) has already produced the assignment list as JSON, and this only
+validates it and writes the calendar.
 
 The parser is intentionally small and is expected to be tuned against a
 saved copy of the real deck (see tests/fixtures). The rules it applies:
@@ -214,12 +219,39 @@ def to_ics(assignments, now=None):
     return "\r\n".join(fold(l) for l in lines) + "\r\n"
 
 
+def load_json(path, today=None):
+    """Validate a hand-made assignment list: [{due, subject?, text}]."""
+    today = today or dt.date.today()
+    with open(path, encoding="utf-8") as f:
+        raw = json.load(f)
+    if not isinstance(raw, list):
+        raise SystemExit("homework JSON must be a list of {due, subject, text}")
+    out = []
+    for i, a in enumerate(raw):
+        try:
+            due = dt.date.fromisoformat(str(a["due"]))
+            text = str(a["text"]).strip()
+        except (KeyError, TypeError, ValueError) as e:
+            raise SystemExit(f"entry {i} is malformed ({e}): {a!r}")
+        if not text:
+            raise SystemExit(f"entry {i} has empty text: {a!r}")
+        subject = (a.get("subject") or None) and str(a["subject"]).strip()
+        out.append({"due": due.isoformat(), "subject": subject or None, "text": text})
+    lo, hi = today - dt.timedelta(days=PAST_DAYS), today + dt.timedelta(days=FUTURE_DAYS)
+    out = [a for a in out if lo <= dt.date.fromisoformat(a["due"]) <= hi]
+    out.sort(key=lambda a: (a["due"], a["subject"] or "", a["text"]))
+    return out
+
+
 def main(argv):
-    if len(argv) < 3:
+    if len(argv) >= 4 and argv[1] == "--from-json":
+        assignments = load_json(argv[2])
+        argv = [argv[0], argv[2], argv[3]]
+    elif len(argv) >= 3:
+        with open(argv[1], encoding="utf-8") as f:
+            assignments = parse_assignments(f.read())
+    else:
         raise SystemExit(__doc__)
-    with open(argv[1], encoding="utf-8") as f:
-        text = f.read()
-    assignments = parse_assignments(text)
     if not assignments:
         raise SystemExit("No assignments parsed from the deck; leaving the old calendar in place.")
     with open(argv[2], "w", encoding="utf-8", newline="") as f:

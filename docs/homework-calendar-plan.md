@@ -177,3 +177,29 @@ Once the deck is readable: run the workflow by hand from the Actions tab,
 download the `deck-text` artifact, copy it over the fixture, adjust the
 parser and tests until the output matches the slides, then add the Pages
 URL to DAKboard.
+
+## Alternative: a Claude Routine does the reading
+
+Instead of a rule-based parser that breaks when the teacher changes layout,
+a scheduled Claude session reads the deck and produces the assignment list,
+and the deterministic script only turns that list into a valid `.ics`.
+
+- **Where it runs:** a Routine in Claude Code on the web, firing a fresh
+  cloud session in this repo's environment on a schedule (e.g. weekdays at
+  7:10am). No home machine involved. The desktop app's scheduled tasks can
+  do the same but only while that computer is awake; use that only if the
+  deck can be read solely through a browser you are signed into.
+- **How it reads the deck:** the Google Drive connector attached to the
+  Routine. The deck must be visible to the Google account connected to
+  Claude; today that account cannot see it ("not found").
+- **What the session does:** read the deck, write `homework.json` as
+  `[{due, subject, text}]`, run
+  `python3 scripts/homework_to_ics.py --from-json homework.json homework.ics`,
+  run the tests, commit and push to main only if the calendar changed, and
+  end with a one-line summary. The script rejects malformed dates or empty
+  entries, so a confused run cannot publish a broken calendar.
+- **Cost:** one short session per firing. A completion notification can be
+  turned on so a failed run is visible.
+
+The GitHub Actions workflow and the Routine are interchangeable back ends
+for the same `homework.ics`; keep whichever proves more reliable.

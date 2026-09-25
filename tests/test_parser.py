@@ -54,6 +54,18 @@ class ParserTests(unittest.TestCase):
         for line in ics.split("\r\n"):
             self.assertLessEqual(len(line.encode()), 75)
 
+    def test_from_json_validates_and_sorts(self):
+        import json, tempfile
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+            json.dump([
+                {"due": "2026-10-02", "text": "Spelling test"},
+                {"due": "2026-09-28", "subject": "Math", "text": "p. 40"},
+                {"due": "2020-01-01", "text": "ancient, dropped by the window"},
+            ], f)
+        items = h.load_json(f.name, today=TODAY)
+        self.assertEqual([a["due"] for a in items], ["2026-09-28", "2026-10-02"])
+        self.assertIsNone(items[1]["subject"])
+
     def test_stable_uids(self):
         a = h.to_ics(self.items, now=dt.datetime(2026, 9, 25, tzinfo=dt.timezone.utc))
         b = h.to_ics(self.items, now=dt.datetime(2026, 9, 26, tzinfo=dt.timezone.utc))
