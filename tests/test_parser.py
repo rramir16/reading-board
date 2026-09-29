@@ -153,8 +153,7 @@ class ParserTests(unittest.TestCase):
     def test_stable_uids(self):
         a = h.to_ics(self.items, now=dt.datetime(2026, 9, 25, tzinfo=dt.timezone.utc))
         b = h.to_ics(self.items, now=dt.datetime(2026, 9, 26, tzinfo=dt.timezone.utc))
-        uids = lambda s: [l for l in s.split("\r\n") if l.startswith("UID:")]
-        self.assertEqual(uids(a), uids(b))
+        self.assertEqual(a, b, "output must not depend on when it was generated")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,6 @@
 name: Homework calendar
 
 on:
-  push:
-    branches: [claude/homework-dashboard-calendar-0sq3ip]   # temporary, for testing
   schedule:
     # Every two hours, 8am-8pm US Eastern on weekdays (cron is UTC).
     - cron: "0 12-23/2 * * 1-5"

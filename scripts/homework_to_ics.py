@@ -349,8 +349,10 @@ def fold(line):
 
 
 def to_ics(assignments, now=None):
-    now = now or dt.datetime.now(dt.timezone.utc)
-    stamp = now.strftime("%Y%m%dT%H%M%SZ")
+    # DTSTAMP is required, but a wall-clock value would change the file on
+    # every run and make the workflow commit noise. Derive it from the
+    # content instead so the file only changes when the homework does.
+    del now
     lines = [
         "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//reading-board//homework//EN",
         "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
@@ -359,6 +361,7 @@ def to_ics(assignments, now=None):
     for a in assignments:
         due = dt.date.fromisoformat(a["due"])
         uid = hashlib.sha1(f"{a['due']}|{a['subject']}|{a['text']}".encode()).hexdigest()[:20]
+        stamp = f"{due:%Y%m%d}T000000Z"
         summary = f"{SUMMARY_PREFIX}: " + (f"{a['subject']}: " if a["subject"] else "") + a["text"]
         lines += [
             "BEGIN:VEVENT",
