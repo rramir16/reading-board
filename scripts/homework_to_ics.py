@@ -175,7 +175,7 @@ def parse_assignments(text, today=None):
 # ---------------------------------------------------------------- ICS ---
 
 def ics_escape(s):
-    return s.replace("\\", "\\\\").replace(";", "\;").replace(",", "\\,").replace("\n", "\\n")
+    return s.replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,").replace("\n", "\\n")
 
 
 def fold(line):

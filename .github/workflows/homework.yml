@@ -29,14 +29,16 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-        run: python3 scripts/fetch_deck.py deck.txt
+        run: python3 scripts/fetch_deck.py deck.txt deck.pdf
 
-      - name: Show the deck text in the log
+      - name: Show the deck in the log
         run: |
-          echo "::group::deck.txt"
-          head -c 40000 deck.txt | cat -v
-          echo
-          echo "::endgroup::"
+          which pdftotext || sudo apt-get install -y -q poppler-utils
+          pdftotext -layout deck.pdf deck-layout.txt
+          pdftotext -bbox-layout deck.pdf deck-bbox.html
+          echo "::group::deck.txt"; head -c 40000 deck.txt; echo; echo "::endgroup::"
+          echo "::group::deck-layout.txt"; head -c 40000 deck-layout.txt; echo; echo "::endgroup::"
+          echo "::group::deck-bbox.html"; grep -E '<(page|block|line|word)' deck-bbox.html | grep -vE '^\s*</?(line|flow)' | head -c 60000; echo; echo "::endgroup::"
 
       - name: Build homework.ics
         continue-on-error: true
@@ -47,7 +49,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: deck-text
-          path: deck.txt
+          path: |
+            deck.txt
+            deck.pdf
+            deck-layout.txt
+            deck-bbox.html
           if-no-files-found: ignore
           retention-days: 7
 

@@ -23,19 +23,24 @@ DECK_ID = os.environ.get("DECK_ID", "1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lp
 SLIDE_SEP = "\f"
 
 
-def fetch_public(deck_id):
-    url = f"https://docs.google.com/presentation/d/{deck_id}/export/txt"
+def fetch_export(deck_id, fmt):
+    """Download the public export of the deck (fmt is 'txt' or 'pdf')."""
+    url = f"https://docs.google.com/presentation/d/{deck_id}/export/{fmt}"
     req = urllib.request.Request(url, headers={"User-Agent": "reading-board-homework/1.0"})
     with urllib.request.urlopen(req, timeout=60) as resp:
         body = resp.read()
         ctype = resp.headers.get("Content-Type", "")
     if b"<html" in body[:2000].lower() or "text/html" in ctype:
         raise SystemExit(
-            "Google returned an HTML page instead of the deck text. The deck is "
+            "Google returned an HTML page instead of the deck. The deck is "
             "probably not shared as 'Anyone with the link'. Either change the "
             "sharing or configure the OAuth secrets for the API path."
         )
-    return body.decode("utf-8-sig")
+    return body
+
+
+def fetch_public(deck_id):
+    return fetch_export(deck_id, "txt").decode("utf-8-sig")
 
 
 def fetch_via_api(deck_id, client_id, client_secret, refresh_token):
@@ -122,6 +127,11 @@ def main():
             f.write(text)
     else:
         sys.stdout.write(text)
+
+    # The PDF keeps the slide layout, which the text export throws away.
+    if len(sys.argv) > 2:
+        with open(sys.argv[2], "wb") as f:
+            f.write(fetch_export(DECK_ID, "pdf"))
 
 
 if __name__ == "__main__":
