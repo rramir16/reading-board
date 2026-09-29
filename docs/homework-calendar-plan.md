@@ -163,20 +163,25 @@ which DAKboard refreshes more often through its native integration.
 
 ## Status
 
-Scaffolded on this branch, waiting on deck access to tune the parser:
+Working end to end on this branch against the real deck.
+
+The deck turned out to be a weekly grid: a "Week of <date>" title, MONDAY
+to FRIDAY headers with dates across the top, and text boxes placed under
+each day's column. The plain-text export loses the columns, so the job
+exports the PDF and uses `pdftotext -bbox-layout` to keep word positions.
+The deck is shared as "Anyone with the link", so no credentials are needed.
 
 | File | Purpose |
 | --- | --- |
-| `.github/workflows/homework.yml` | Scheduled job (every 2h, weekdays, 8am-8pm ET) that fetches, parses, and commits `homework.ics` when it changed |
-| `scripts/fetch_deck.py` | Reads the deck as text: public export URL, or the Slides API when the three `GOOGLE_*` secrets are set |
-| `scripts/homework_to_ics.py` | Parser and ICS writer; `TIMEZONE`, `SUMMARY_PREFIX`, and the date window are constants at the top |
-| `tests/fixtures/sample-deck.txt` | Stand-in deck text; replace with a real export once the deck is readable |
-| `tests/test_parser.py` | Pins the parser's behaviour; runs in the workflow before every fetch |
+| `.github/workflows/homework.yml` | Scheduled job (every 2h, weekdays, 8am-8pm ET) that fetches the PDF, parses the grid, and commits `homework.ics` when it changed |
+| `scripts/fetch_deck.py` | Downloads the public text and PDF exports, or uses the Slides API when the three `GOOGLE_*` secrets are set |
+| `scripts/homework_to_ics.py` | Grid parser, older line-based parser, JSON input mode, and the ICS writer; `GRADE`, `TIMEZONE`, `SUMMARY_PREFIX` are constants at the top |
+| `tests/fixtures/deck-bbox-2026-09-28.html` | The real deck's layout for the week of Sept 28, in pdftotext bbox format |
+| `tests/test_parser.py` | Pins both parsers; runs in the workflow before every fetch |
 
-Once the deck is readable: run the workflow by hand from the Actions tab,
-download the `deck-text` artifact, copy it over the fixture, adjust the
-parser and tests until the output matches the slides, then add the Pages
-URL to DAKboard.
+Remaining: set `GRADE` to the right grade, merge to main so GitHub Pages
+serves `homework.ics`, add the URL to DAKboard, and drop the temporary
+push trigger from the workflow.
 
 ## Alternative: a Claude Routine does the reading
 
