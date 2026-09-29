@@ -1,0 +1,77 @@
+name: Homework calendar
+
+on:
+  schedule:
+    # Every two hours, 8am-8pm US Eastern on weekdays (cron is UTC).
+    - cron: "0 12-23/2 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: homework-calendar
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run parser tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Fetch the deck
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: python3 scripts/fetch_deck.py deck.txt deck.pdf
+
+      - name: Extract the slide layout from the PDF
+        run: |
+          which pdftotext >/dev/null || sudo apt-get install -y -q poppler-utils >/dev/null
+          mkdir -p deck
+          pdftotext -bbox-layout deck.pdf deck/deck-bbox.html
+          pdftotext -layout deck.pdf deck/deck-layout.txt
+          echo "::group::deck-layout.txt"; cat deck/deck-layout.txt; echo "::endgroup::"
+
+      # deck/override.json is written by the Claude Routine when the parser
+      # misread a slide. It carries the sha256 of the deck-bbox.html it was
+      # made for, so it only applies while the deck is unchanged.
+      - name: Build homework.ics
+        run: |
+          current=$(sha256sum deck/deck-bbox.html | cut -d' ' -f1)
+          wanted=$(python3 -c "import json,sys; print(json.load(open('deck/override.json')).get('deck_sha256',''))" 2>/dev/null || true)
+          if [ -f deck/override.json ] && [ "$current" = "$wanted" ]; then
+            echo "Using deck/override.json (deck unchanged since the Routine wrote it)"
+            python3 scripts/homework_to_ics.py --from-json deck/override.json homework.ics
+            python3 -c "import json; json.dump(json.load(open('deck/override.json'))['assignments'], open('homework.json','w'), indent=2)"
+          else
+            python3 scripts/homework_to_ics.py deck/deck-bbox.html homework.ics homework.json
+          fi
+
+      - name: Keep a copy of the deck text for debugging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deck-text
+          path: |
+            deck.txt
+            deck.pdf
+            deck/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Commit if changed
+        run: |
+          git config user.name "homework-bot"
+          git config user.email "homework-bot@users.noreply.github.com"
+          git add homework.ics homework.json deck/deck-bbox.html deck/deck-layout.txt
+          if git diff --cached --quiet; then
+            echo "No change to the homework calendar."
+            exit 0
+          fi
+          git commit -m "Update homework calendar"
+          git push
