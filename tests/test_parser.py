@@ -7,7 +7,45 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 import homework_to_ics as h  # noqa: E402
 
 FIXTURE = pathlib.Path(__file__).parent / "fixtures" / "sample-deck.txt"
+GRID = pathlib.Path(__file__).parent / "fixtures" / "deck-bbox-2026-09-28.html"
 TODAY = dt.date(2026, 9, 25)
+
+
+class GridParserTests(unittest.TestCase):
+    """The real deck: a weekly grid exported via pdftotext -bbox-layout."""
+
+    def setUp(self):
+        h.GRADE = None
+        self.items = h.parse_bbox(GRID.read_text(encoding="utf-8"), today=dt.date(2026, 9, 29))
+
+    def tearDown(self):
+        h.GRADE = None
+
+    def test_boxes_land_in_their_day_column(self):
+        got = [(a["due"], a["subject"], a["text"]) for a in self.items]
+        self.assertEqual(got, [
+            ("2026-09-28", "Math", "4th: Finding Factors"),
+            ("2026-09-28", "Math", "5th: Complete ÷ Powers of 10 Mystery Picture"),
+            ("2026-09-28", "Writing", "Celia Cruz Types of Sentences"),
+            ("2026-09-29", "Writing", "Celia Cruz Conjunctions"),
+        ])
+
+    def test_template_slide_is_ignored(self):
+        texts = [a["text"] for a in self.items]
+        self.assertFalse(any("___" in t for t in texts))
+        self.assertFalse(any(t.startswith("/") for t in texts))
+
+    def test_grade_filter(self):
+        h.GRADE = "5th"
+        items = h.parse_bbox(GRID.read_text(encoding="utf-8"), today=dt.date(2026, 9, 29))
+        math = [a for a in items if a["subject"] == "Math"]
+        self.assertEqual([a["text"] for a in math], ["Complete ÷ Powers of 10 Mystery Picture"])
+        self.assertEqual(len(items), 3)
+
+    def test_headers_without_dates_fall_back_to_week_of(self):
+        xml = GRID.read_text(encoding="utf-8").replace(">9/28<", ">-<").replace(">9/29<", ">-<")
+        items = h.parse_bbox(xml, today=dt.date(2026, 9, 29))
+        self.assertEqual({a["due"] for a in items}, {"2026-09-28", "2026-09-29"})
 
 
 class ParserTests(unittest.TestCase):

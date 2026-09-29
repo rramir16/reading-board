@@ -31,18 +31,15 @@ jobs:
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: python3 scripts/fetch_deck.py deck.txt deck.pdf
 
-      - name: Show the deck in the log
+      - name: Extract the slide layout from the PDF
         run: |
-          which pdftotext || sudo apt-get install -y -q poppler-utils
-          pdftotext -layout deck.pdf deck-layout.txt
+          which pdftotext >/dev/null || sudo apt-get install -y -q poppler-utils >/dev/null
           pdftotext -bbox-layout deck.pdf deck-bbox.html
-          echo "::group::deck.txt"; head -c 40000 deck.txt; echo; echo "::endgroup::"
-          echo "::group::deck-layout.txt"; head -c 40000 deck-layout.txt; echo; echo "::endgroup::"
-          echo "::group::deck-bbox.html"; grep -E '<(page|block|line|word)' deck-bbox.html | grep -vE '^\s*</?(line|flow)' | head -c 60000; echo; echo "::endgroup::"
+          pdftotext -layout deck.pdf deck-layout.txt
+          echo "::group::deck-layout.txt"; cat deck-layout.txt; echo "::endgroup::"
 
       - name: Build homework.ics
-        continue-on-error: true
-        run: python3 scripts/homework_to_ics.py deck.txt homework.ics homework.json
+        run: python3 scripts/homework_to_ics.py deck-bbox.html homework.ics homework.json
 
       - name: Keep a copy of the deck text for debugging
         if: always()

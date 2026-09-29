@@ -1,15 +1,34 @@
 #!/usr/bin/env python3
-"""Turn the deck's plain text into homework.ics (and homework.json).
+"""Turn the teacher's homework deck into homework.ics (and homework.json).
 
+    python3 scripts/homework_to_ics.py deck-bbox.html homework.ics [homework.json]
     python3 scripts/homework_to_ics.py deck.txt homework.ics [homework.json]
     python3 scripts/homework_to_ics.py --from-json homework.json homework.ics
 
-The second form skips the parser: something else (a Claude Routine reading
-the deck) has already produced the assignment list as JSON, and this only
-validates it and writes the calendar.
+The first form is the one the workflow uses. The deck is a weekly grid: a
+"Week of <date>" title, MONDAY..FRIDAY headers with dates across the top,
+and text boxes placed under each day's column. The plain-text export loses
+the columns, so the workflow exports the PDF and runs
 
-The parser is intentionally small and is expected to be tuned against a
-saved copy of the real deck (see tests/fixtures). The rules it applies:
+    pdftotext -bbox-layout deck.pdf deck-bbox.html
+
+which keeps every word's position. The grid parser (parse_bbox) then:
+
+  * skips slides whose headers carry no dates (the blank template);
+  * takes each text box below the headers and assigns it to the day whose
+    header is nearest horizontally;
+  * treats a box's first line as the subject when it is a single short
+    label ("Writing", "Math") and the rest as the assignment text;
+  * splits a box into separate assignments at grade labels ("4th:", "5th:")
+    and, when GRADE is set, keeps only that grade's line plus unlabelled ones.
+
+The second form runs the older line-based parser (parse_assignments), kept
+for decks that are plain lists rather than grids. The third form skips
+parsing: something else (a Claude Routine reading the deck) has already
+produced the assignment list as JSON, and this only validates it and writes
+the calendar.
+
+Rules of the line-based parser:
 
   * slides are separated by a form feed (what fetch_deck.py emits);
   * a line that is a date, "Week of <date>", or a weekday name sets the
@@ -25,12 +44,16 @@ import hashlib
 import json
 import re
 import sys
+import xml.etree.ElementTree as ET
 
 DECK_URL = "https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit"
 TIMEZONE = "America/New_York"          # only labels the calendar; events are all-day
 CAL_NAME = "Homework"
 SUMMARY_PREFIX = "HW"
 PAST_DAYS, FUTURE_DAYS = 14, 220        # window of events kept in the file
+GRADE = None                            # "4th" or "5th" to keep only that grade's lines
+GRADE_RE = re.compile(r"^(?P<grade>\d(?:st|nd|rd|th))\s*[:\-\u2013]\s*(?P<text>.*)$", re.I)
+DAY_HEADER_RE = re.compile(r"^(?P<wd>mon|tues|wednes|thurs|fri)day\b\.?\s*(?P<rest>.*)$", re.I)
 
 MONTHS = {m: i for i, m in enumerate(
     ["january", "february", "march", "april", "may", "june", "july",
@@ -172,6 +195,100 @@ def parse_assignments(text, today=None):
     return kept
 
 
+# --------------------------------------------------------- grid parser ---
+
+def _local(tag):
+    return tag.rsplit("}", 1)[-1]
+
+
+def _bbox_pages(xml_text):
+    """Yield pages as lists of blocks; a block is (x0, y0, x1, y1, [line, ...])."""
+    root = ET.fromstring(xml_text)
+    for page in root.iter():
+        if _local(page.tag) != "page":
+            continue
+        blocks = []
+        for block in page.iter():
+            if _local(block.tag) != "block":
+                continue
+            lines = []
+            for line in block.iter():
+                if _local(line.tag) != "line":
+                    continue
+                words = [(w.text or "").strip() for w in line.iter() if _local(w.tag) == "word"]
+                text = " ".join(w for w in words if w)
+                if text:
+                    lines.append(text)
+            if lines:
+                blocks.append((float(block.get("xMin")), float(block.get("yMin")),
+                               float(block.get("xMax")), float(block.get("yMax")), lines))
+        yield blocks
+
+
+def _split_block(lines):
+    """One text box -> [(subject, text, grade)], splitting at grade labels."""
+    subject = None
+    if len(lines) > 1 and len(lines[0].split()) <= 2 and not lines[0].endswith(":") and not GRADE_RE.match(lines[0]):
+        subject, lines = lines[0].rstrip(":"), lines[1:]
+    items = []
+    for line in lines:
+        gm = GRADE_RE.match(line)
+        if gm:
+            items.append([subject, gm.group("text").strip(), gm.group("grade").lower()])
+        elif items:
+            items[-1][1] = (items[-1][1] + " " + line).strip()
+        else:
+            items.append([subject, line, None])
+    return [tuple(i) for i in items if i[1]]
+
+
+def parse_bbox(xml_text, today=None):
+    today = today or dt.date.today()
+    found = []
+    for blocks in _bbox_pages(xml_text):
+        week_monday = None
+        headers = []   # (x_center, y_bottom, date)
+        for x0, y0, x1, y1, lines in blocks:
+            first = lines[0]
+            if WEEK_OF_RE.search(first):
+                d = parse_date(first, today)
+                if d:
+                    week_monday = d - dt.timedelta(days=d.weekday())
+                continue
+            hm = DAY_HEADER_RE.match(first)
+            if hm and len(lines) == 1:
+                d = parse_date(hm.group("rest"), today)
+                if d is None and week_monday is not None:
+                    d = week_monday + dt.timedelta(days=parse_weekday(first))
+                if d is not None:
+                    headers.append(((x0 + x1) / 2, y1, d))
+        if not headers:
+            continue   # blank template slide, or a layout we do not understand
+        header_bottom = max(h[1] for h in headers)
+        for x0, y0, x1, y1, lines in blocks:
+            if y0 < header_bottom - 2:
+                continue   # the title row and the headers themselves
+            xc = (x0 + x1) / 2
+            due = min(headers, key=lambda h: abs(h[0] - xc))[2]
+            for subject, text, grade in _split_block(lines):
+                if GRADE and grade and grade != GRADE.lower():
+                    continue
+                if not GRADE and grade:
+                    text = f"{grade}: {text}"
+                found.append({"due": due.isoformat(), "subject": subject, "text": text})
+
+    lo, hi = today - dt.timedelta(days=PAST_DAYS), today + dt.timedelta(days=FUTURE_DAYS)
+    seen, kept = set(), []
+    for a in found:
+        key = (a["due"], a["subject"], a["text"].lower())
+        if key in seen or not (lo <= dt.date.fromisoformat(a["due"]) <= hi):
+            continue
+        seen.add(key)
+        kept.append(a)
+    kept.sort(key=lambda a: (a["due"], a["subject"] or "", a["text"]))
+    return kept
+
+
 # ---------------------------------------------------------------- ICS ---
 
 def ics_escape(s):
@@ -249,7 +366,8 @@ def main(argv):
         argv = [argv[0], argv[2], argv[3]]
     elif len(argv) >= 3:
         with open(argv[1], encoding="utf-8") as f:
-            assignments = parse_assignments(f.read())
+            raw = f.read()
+        assignments = parse_bbox(raw) if argv[1].endswith((".html", ".xml")) else parse_assignments(raw)
     else:
         raise SystemExit(__doc__)
     if not assignments:
@@ -260,6 +378,8 @@ def main(argv):
         with open(argv[3], "w", encoding="utf-8") as f:
             json.dump(assignments, f, indent=2)
     print(f"{len(assignments)} assignments, {assignments[0]['due']} .. {assignments[-1]['due']}")
+    for a in assignments:
+        print(f"  {a['due']}  {(a['subject'] + ': ') if a['subject'] else ''}{a['text']}")
 
 
 if __name__ == "__main__":
