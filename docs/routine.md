@@ -1,6 +1,6 @@
 # Homework Routine runbook
 
-A scheduled Claude session runs this each weekday morning. It is the only
+A scheduled Claude session runs this at 3pm and 4pm Eastern on weekdays, the window in which the teacher edits the deck. It is the only
 thing that updates the homework calendar. It reads the teacher's deck, turns
 it into `homework.ics`, and pushes to `main`, where GitHub Pages serves
 https://rramir16.github.io/reading-board/homework.ics for DAKboard.
