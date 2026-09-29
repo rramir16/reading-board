@@ -95,7 +95,7 @@ endings is fine and avoids a dependency.
 ### 4. Scheduling and publishing
 
 A Claude Routine (Claude Code on the web) fires a fresh cloud session each
-afternoon (3pm and 4pm Eastern, every day). The session fetches the deck, runs the scripts, reads the
+weekday afternoon (3pm and 4pm Eastern). The session fetches the deck, runs the scripts, reads the
 slide itself to check the result, and commits `homework.ics` to `main`
 when it changed. GitHub Pages then serves it, the same way it serves
 `index.html` and the `art/` folder. The exact steps are in
@@ -163,7 +163,7 @@ which DAKboard refreshes more often through its native integration.
 
 ## Status
 
-Live. The Routine "Homework calendar check" runs every day at 3pm and
+Live. The Routine "Homework calendar check" runs weekdays at 3pm and
 4pm Eastern. The calendar is at
 https://rramir16.github.io/reading-board/homework.ics.
 
