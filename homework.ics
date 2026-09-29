@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//reading-board//homework//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Homework
+X-WR-TIMEZONE:America/New_York
+BEGIN:VEVENT
+UID:9044d4946ff1a3ecc43a@reading-board
+DTSTAMP:20260929T220956Z
+DTSTART;VALUE=DATE:20261002
+DTEND;VALUE=DATE:20261003
+SUMMARY:HW: Week of _______________________________
+DESCRIPTION:Week of _______________________________\nhttps://docs.google.co
+ m/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR
