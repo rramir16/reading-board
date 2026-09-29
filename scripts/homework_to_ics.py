@@ -51,7 +51,7 @@ TIMEZONE = "America/New_York"          # only labels the calendar; events are al
 CAL_NAME = "Homework"
 SUMMARY_PREFIX = "HW"
 PAST_DAYS, FUTURE_DAYS = 14, 220        # window of events kept in the file
-GRADE = None                            # "4th" or "5th" to keep only that grade's lines
+GRADE = "4th"                           # keep only this grade's lines; None keeps all
 GRADE_RE = re.compile(r"^(?P<grade>\d(?:st|nd|rd|th))\s*[:\-\u2013]\s*(?P<text>.*)$", re.I)
 DAY_HEADER_RE = re.compile(r"^(?P<wd>mon|tues|wednes|thurs|fri)day\b\.?\s*(?P<rest>.*)$", re.I)
 
@@ -197,12 +197,17 @@ def parse_assignments(text, today=None):
 
 # --------------------------------------------------------- grid parser ---
 
+DAY_WORD_RE = re.compile(r"^(?P<wd>mon|tues|wednes|thurs|fri)day[.,:]?$", re.I)
+PLACEHOLDER_RE = re.compile(r"^[/\-_:]+$")
+
+
 def _local(tag):
     return tag.rsplit("}", 1)[-1]
 
 
 def _bbox_pages(xml_text):
-    """Yield pages as lists of blocks; a block is (x0, y0, x1, y1, [line, ...])."""
+    """Yield pages as lists of blocks: (x0, y0, x1, y1, lines), where each
+    line is a list of (word, x0, x1) so headers can be located by position."""
     root = ET.fromstring(xml_text)
     for page in root.iter():
         if _local(page.tag) != "page":
@@ -215,14 +220,42 @@ def _bbox_pages(xml_text):
             for line in block.iter():
                 if _local(line.tag) != "line":
                     continue
-                words = [(w.text or "").strip() for w in line.iter() if _local(w.tag) == "word"]
-                text = " ".join(w for w in words if w)
-                if text:
-                    lines.append(text)
+                words = [((w.text or "").strip(), float(w.get("xMin")), float(w.get("xMax")))
+                         for w in line.iter() if _local(w.tag) == "word"]
+                words = [w for w in words if w[0]]
+                if words:
+                    lines.append(words)
             if lines:
                 blocks.append((float(block.get("xMin")), float(block.get("yMin")),
                                float(block.get("xMax")), float(block.get("yMax")), lines))
         yield blocks
+
+
+def _line_text(words):
+    return " ".join(w[0] for w in words)
+
+
+def _day_headers(words, today):
+    """Find MONDAY 9/28 style headers in a line; several may share one line
+    when a PDF tool merges the header row. Returns [(x_center, date, weekday)]."""
+    found, i = [], 0
+    while i < len(words):
+        text, x0, x1 = words[i]
+        m = DAY_WORD_RE.match(text)
+        if not m:
+            i += 1
+            continue
+        weekday = parse_weekday(text)
+        date = None
+        if i + 1 < len(words) and not DAY_WORD_RE.match(words[i + 1][0]):
+            nxt = words[i + 1]
+            date = parse_date(nxt[0], today)
+            if date or PLACEHOLDER_RE.match(nxt[0]):
+                x1 = nxt[2]
+                i += 1
+        found.append(((x0 + x1) / 2, date, weekday))
+        i += 1
+    return found
 
 
 def _split_block(lines):
@@ -246,31 +279,39 @@ def parse_bbox(xml_text, today=None):
     today = today or dt.date.today()
     found = []
     for blocks in _bbox_pages(xml_text):
-        week_monday = None
-        headers = []   # (x_center, y_bottom, date)
+        week_monday, headers, boxes = None, [], []
         for x0, y0, x1, y1, lines in blocks:
-            first = lines[0]
-            if WEEK_OF_RE.search(first):
-                d = parse_date(first, today)
-                if d:
-                    week_monday = d - dt.timedelta(days=d.weekday())
-                continue
-            hm = DAY_HEADER_RE.match(first)
-            if hm and len(lines) == 1:
-                d = parse_date(hm.group("rest"), today)
-                if d is None and week_monday is not None:
-                    d = week_monday + dt.timedelta(days=parse_weekday(first))
-                if d is not None:
-                    headers.append(((x0 + x1) / 2, y1, d))
-        if not headers:
+            content = []
+            for words in lines:
+                text = _line_text(words)
+                if WEEK_OF_RE.search(text):
+                    d = parse_date(text, today)
+                    if d:
+                        week_monday = d - dt.timedelta(days=d.weekday())
+                    continue
+                hs = _day_headers(words, today)
+                if hs:
+                    headers.extend((xc, date, wd, y0, y1) for xc, date, wd in hs)
+                    continue
+                content.append(text)
+            if content:
+                boxes.append(((x0 + x1) / 2, y0, y1, content))
+
+        columns = []
+        for xc, date, wd, hy0, hy1 in headers:
+            if date is None and week_monday is not None and wd is not None:
+                date = week_monday + dt.timedelta(days=wd)
+            if date is not None:
+                columns.append((xc, date, hy0))
+        if not columns:
             continue   # blank template slide, or a layout we do not understand
-        header_bottom = max(h[1] for h in headers)
-        for x0, y0, x1, y1, lines in blocks:
-            if y0 < header_bottom - 2:
-                continue   # the title row and the headers themselves
-            xc = (x0 + x1) / 2
-            due = min(headers, key=lambda h: abs(h[0] - xc))[2]
-            for subject, text, grade in _split_block(lines):
+        header_top = min(c[2] for c in columns)
+
+        for xc, y0, y1, content in boxes:
+            if y1 < header_top:
+                continue   # something above the day headers, like a title
+            due = min(columns, key=lambda c: abs(c[0] - xc))[1]
+            for subject, text, grade in _split_block(content):
                 if GRADE and grade and grade != GRADE.lower():
                     continue
                 if not GRADE and grade:
@@ -341,6 +382,8 @@ def load_json(path, today=None):
     today = today or dt.date.today()
     with open(path, encoding="utf-8") as f:
         raw = json.load(f)
+    if isinstance(raw, dict):
+        raw = raw.get("assignments")   # deck/override.json wraps the list with a deck hash
     if not isinstance(raw, list):
         raise SystemExit("homework JSON must be a list of {due, subject, text}")
     out = []

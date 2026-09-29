@@ -183,28 +183,22 @@ Remaining: set `GRADE` to the right grade, merge to main so GitHub Pages
 serves `homework.ics`, add the URL to DAKboard, and drop the temporary
 push trigger from the workflow.
 
-## Alternative: a Claude Routine does the reading
+## The Claude Routine
 
-Instead of a rule-based parser that breaks when the teacher changes layout,
-a scheduled Claude session reads the deck and produces the assignment list,
-and the deterministic script only turns that list into a valid `.ics`.
+Chosen because the slide layout is not expected to stay stable. The two
+parts share the work:
 
-- **Where it runs:** a Routine in Claude Code on the web, firing a fresh
-  cloud session in this repo's environment on a schedule (e.g. weekdays at
-  7:10am). No home machine involved. The desktop app's scheduled tasks can
-  do the same but only while that computer is awake; use that only if the
-  deck can be read solely through a browser you are signed into.
-- **How it reads the deck:** the Google Drive connector attached to the
-  Routine. The deck must be visible to the Google account connected to
-  Claude; today that account cannot see it ("not found").
-- **What the session does:** read the deck, write `homework.json` as
-  `[{due, subject, text}]`, run
-  `python3 scripts/homework_to_ics.py --from-json homework.json homework.ics`,
-  run the tests, commit and push to main only if the calendar changed, and
-  end with a one-line summary. The script rejects malformed dates or empty
-  entries, so a confused run cannot publish a broken calendar.
-- **Cost:** one short session per firing. A completion notification can be
-  turned on so a failed run is visible.
+- **GitHub Actions** (every 2h on weekdays) fetches the deck, parses it,
+  commits `homework.ics` plus a snapshot of the slide layout in `deck/`. If
+  `deck/override.json` exists and matches the current deck, it uses that
+  instead of the parser.
+- **The Routine** (weekday mornings) reads the slide like a person, checks
+  the parser's output, and when they disagree writes `deck/override.json`,
+  regenerates the calendar, and where possible fixes the parser and adds a
+  fixture. The exact steps are in `docs/routine.md`.
 
-The GitHub Actions workflow and the Routine are interchangeable back ends
-for the same `homework.ics`; keep whichever proves more reliable.
+The Routine session can fetch the deck itself only if the cloud
+environment's network policy allows `docs.google.com`; otherwise it works
+from the snapshot in git, which is at most two hours old on a school day.
+`scripts/pdf_layout.py` replaces poppler's pdftotext in that session, since
+it can `pip install pdfminer.six` but cannot use apt.

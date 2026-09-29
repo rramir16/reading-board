@@ -34,12 +34,25 @@ jobs:
       - name: Extract the slide layout from the PDF
         run: |
           which pdftotext >/dev/null || sudo apt-get install -y -q poppler-utils >/dev/null
-          pdftotext -bbox-layout deck.pdf deck-bbox.html
-          pdftotext -layout deck.pdf deck-layout.txt
-          echo "::group::deck-layout.txt"; cat deck-layout.txt; echo "::endgroup::"
+          mkdir -p deck
+          pdftotext -bbox-layout deck.pdf deck/deck-bbox.html
+          pdftotext -layout deck.pdf deck/deck-layout.txt
+          echo "::group::deck-layout.txt"; cat deck/deck-layout.txt; echo "::endgroup::"
 
+      # deck/override.json is written by the Claude Routine when the parser
+      # misread a slide. It carries the sha256 of the deck-bbox.html it was
+      # made for, so it only applies while the deck is unchanged.
       - name: Build homework.ics
-        run: python3 scripts/homework_to_ics.py deck-bbox.html homework.ics homework.json
+        run: |
+          current=$(sha256sum deck/deck-bbox.html | cut -d' ' -f1)
+          wanted=$(python3 -c "import json,sys; print(json.load(open('deck/override.json')).get('deck_sha256',''))" 2>/dev/null || true)
+          if [ -f deck/override.json ] && [ "$current" = "$wanted" ]; then
+            echo "Using deck/override.json (deck unchanged since the Routine wrote it)"
+            python3 scripts/homework_to_ics.py --from-json deck/override.json homework.ics
+            python3 -c "import json; json.dump(json.load(open('deck/override.json'))['assignments'], open('homework.json','w'), indent=2)"
+          else
+            python3 scripts/homework_to_ics.py deck/deck-bbox.html homework.ics homework.json
+          fi
 
       - name: Keep a copy of the deck text for debugging
         if: always()
@@ -49,8 +62,7 @@ jobs:
           path: |
             deck.txt
             deck.pdf
-            deck-layout.txt
-            deck-bbox.html
+            deck/
           if-no-files-found: ignore
           retention-days: 7
 
@@ -58,7 +70,7 @@ jobs:
         run: |
           git config user.name "homework-bot"
           git config user.email "homework-bot@users.noreply.github.com"
-          git add homework.ics homework.json
+          git add homework.ics homework.json deck/deck-bbox.html deck/deck-layout.txt
           if git diff --cached --quiet; then
             echo "No change to the homework calendar."
             exit 0
