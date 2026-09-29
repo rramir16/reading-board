@@ -29,7 +29,15 @@ jobs:
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: python3 scripts/fetch_deck.py deck.txt
 
+      - name: Show the deck text in the log
+        run: |
+          echo "::group::deck.txt"
+          head -c 40000 deck.txt | cat -v
+          echo
+          echo "::endgroup::"
+
       - name: Build homework.ics
+        continue-on-error: true
         run: python3 scripts/homework_to_ics.py deck.txt homework.ics homework.json
 
       - name: Keep a copy of the deck text for debugging
