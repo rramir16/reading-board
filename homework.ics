@@ -6,26 +6,13 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:6abacda6c12e43f28653@reading-board
-DTSTAMP:20260929T221500Z
+UID:d3c93ee775e216750620@reading-board
+DTSTAMP:20260929T222255Z
 DTSTART;VALUE=DATE:20260928
 DTEND;VALUE=DATE:20260929
-SUMMARY:HW: Math: 4th: Finding Factors
-DESCRIPTION:4th: Finding Factors\nhttps://docs.google.com/presentation/d/13
- 81vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:4337ed95794bcd30cbe4@reading-board
-DTSTAMP:20260929T221500Z
-DTSTART;VALUE=DATE:20260928
-DTEND;VALUE=DATE:20260929
-SUMMARY:HW: Math: 5th: Complete ÷ Powers of 10 Mystery Picture
-DESCRIPTION:5th: Complete ÷ Powers of 10 Mystery Picture\nhttps://docs.goo
- gle.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+SUMMARY:HW: Math: Finding Factors
+DESCRIPTION:Finding Factors\nhttps://docs.google.com/presentation/d/1381vHf
+ tL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
 CATEGORIES:Homework
@@ -33,7 +20,7 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:88ca627a7799696409d2@reading-board
-DTSTAMP:20260929T221500Z
+DTSTAMP:20260929T222255Z
 DTSTART;VALUE=DATE:20260928
 DTEND;VALUE=DATE:20260929
 SUMMARY:HW: Writing: Celia Cruz Types of Sentences
@@ -46,7 +33,7 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:ebca7b68a16fd35b7fdb@reading-board
-DTSTAMP:20260929T221500Z
+DTSTAMP:20260929T222255Z
 DTSTART;VALUE=DATE:20260929
 DTEND;VALUE=DATE:20260930
 SUMMARY:HW: Writing: Celia Cruz Conjunctions
