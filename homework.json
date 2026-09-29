@@ -1,7 +1,22 @@
 [
   {
-    "due": "2026-10-02",
-    "subject": null,
-    "text": "Week of _______________________________"
+    "due": "2026-09-28",
+    "subject": "Math",
+    "text": "4th: Finding Factors"
+  },
+  {
+    "due": "2026-09-28",
+    "subject": "Math",
+    "text": "5th: Complete \u00f7 Powers of 10 Mystery Picture"
+  },
+  {
+    "due": "2026-09-28",
+    "subject": "Writing",
+    "text": "Celia Cruz Types of Sentences"
+  },
+  {
+    "due": "2026-09-29",
+    "subject": "Writing",
+    "text": "Celia Cruz Conjunctions"
   }
 ]
