@@ -5,14 +5,15 @@
     python3 scripts/homework_to_ics.py deck.txt homework.ics [homework.json]
     python3 scripts/homework_to_ics.py --from-json homework.json homework.ics
 
-The first form is the one the workflow uses. The deck is a weekly grid: a
-"Week of <date>" title, MONDAY..FRIDAY headers with dates across the top,
-and text boxes placed under each day's column. The plain-text export loses
-the columns, so the workflow exports the PDF and runs
+The first form is the normal one. The deck is a weekly grid: a "Week of
+<date>" title, MONDAY..FRIDAY headers with dates across the top, and text
+boxes placed under each day's column. The plain-text export loses the
+columns, so the Routine exports the PDF and runs
 
-    pdftotext -bbox-layout deck.pdf deck-bbox.html
+    python3 scripts/pdf_layout.py deck.pdf deck-bbox.html
 
-which keeps every word's position. The grid parser (parse_bbox) then:
+(the same shape as poppler's `pdftotext -bbox-layout`), which keeps every
+word's position. The grid parser (parse_bbox) then:
 
   * skips slides whose headers carry no dates (the blank template);
   * takes each text box below the headers and assigns it to the day whose
@@ -386,7 +387,7 @@ def load_json(path, today=None):
     with open(path, encoding="utf-8") as f:
         raw = json.load(f)
     if isinstance(raw, dict):
-        raw = raw.get("assignments")   # deck/override.json wraps the list with a deck hash
+        raw = raw.get("assignments")   # a wrapped list is accepted too
     if not isinstance(raw, list):
         raise SystemExit("homework JSON must be a list of {due, subject, text}")
     out = []

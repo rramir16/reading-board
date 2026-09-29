@@ -94,20 +94,20 @@ endings is fine and avoids a dependency.
 
 ### 4. Scheduling and publishing
 
-`.github/workflows/homework.yml`:
+A Claude Routine (Claude Code on the web) fires a fresh cloud session each
+weekday morning. The session fetches the deck, runs the scripts, reads the
+slide itself to check the result, and commits `homework.ics` to `main`
+when it changed. GitHub Pages then serves it, the same way it serves
+`index.html` and the `art/` folder. The exact steps are in
+`docs/routine.md`. Nothing runs at home.
 
-- `schedule`: every 2 hours on weekdays during school hours, plus a
-  `workflow_dispatch` button for manual runs. GitHub cron is UTC, so the
-  hours get written accordingly.
-- Steps: checkout, set up Python, fetch deck, run parser, write
-  `homework.ics` (and `homework.json` as a by-product), commit and push
-  only if the file actually changed.
-- `permissions: contents: write` so the workflow can commit.
-- A parse failure or an empty result fails the run and leaves the previous
-  `homework.ics` untouched. GitHub emails on a failed scheduled run.
+The cloud environment's network policy must allow `docs.google.com` and
+`*.googleusercontent.com` (the export redirects there). The session installs
+`pdfminer.six` from PyPI at the start of each run.
 
-GitHub Pages then serves `https://rramir16.github.io/reading-board/homework.ics`
-the same way it serves `index.html` and the `art/` folder today.
+A GitHub Actions workflow did this job while the Routine could not reach
+Google; it was removed once the network policy was opened, to avoid two
+schedulers writing the same file.
 
 ### 5. DAKboard side
 
@@ -163,42 +163,15 @@ which DAKboard refreshes more often through its native integration.
 
 ## Status
 
-Working end to end on this branch against the real deck.
-
-The deck turned out to be a weekly grid: a "Week of <date>" title, MONDAY
-to FRIDAY headers with dates across the top, and text boxes placed under
-each day's column. The plain-text export loses the columns, so the job
-exports the PDF and uses `pdftotext -bbox-layout` to keep word positions.
-The deck is shared as "Anyone with the link", so no credentials are needed.
+Live. The Routine "Homework calendar check" runs weekdays at 6:40am
+Eastern. The calendar is at
+https://rramir16.github.io/reading-board/homework.ics.
 
 | File | Purpose |
 | --- | --- |
-| `.github/workflows/homework.yml` | Scheduled job (every 2h, weekdays, 8am-8pm ET) that fetches the PDF, parses the grid, and commits `homework.ics` when it changed |
-| `scripts/fetch_deck.py` | Downloads the public text and PDF exports, or uses the Slides API when the three `GOOGLE_*` secrets are set |
-| `scripts/homework_to_ics.py` | Grid parser, older line-based parser, JSON input mode, and the ICS writer; `GRADE`, `TIMEZONE`, `SUMMARY_PREFIX` are constants at the top |
-| `tests/fixtures/deck-bbox-2026-09-28.html` | The real deck's layout for the week of Sept 28, in pdftotext bbox format |
-| `tests/test_parser.py` | Pins both parsers; runs in the workflow before every fetch |
-
-Remaining: set `GRADE` to the right grade, merge to main so GitHub Pages
-serves `homework.ics`, add the URL to DAKboard, and drop the temporary
-push trigger from the workflow.
-
-## The Claude Routine
-
-Chosen because the slide layout is not expected to stay stable. The two
-parts share the work:
-
-- **GitHub Actions** (every 2h on weekdays) fetches the deck, parses it,
-  commits `homework.ics` plus a snapshot of the slide layout in `deck/`. If
-  `deck/override.json` exists and matches the current deck, it uses that
-  instead of the parser.
-- **The Routine** (weekday mornings) reads the slide like a person, checks
-  the parser's output, and when they disagree writes `deck/override.json`,
-  regenerates the calendar, and where possible fixes the parser and adds a
-  fixture. The exact steps are in `docs/routine.md`.
-
-The Routine session can fetch the deck itself only if the cloud
-environment's network policy allows `docs.google.com`; otherwise it works
-from the snapshot in git, which is at most two hours old on a school day.
-`scripts/pdf_layout.py` replaces poppler's pdftotext in that session, since
-it can `pip install pdfminer.six` but cannot use apt.
+| `docs/routine.md` | What the Routine does each run |
+| `scripts/fetch_deck.py` | Downloads the public text and PDF exports of the deck |
+| `scripts/pdf_layout.py` | Word positions from the PDF (pdfminer), plus a readable per-column dump |
+| `scripts/homework_to_ics.py` | Grid parser, JSON input mode, ICS writer; `GRADE`, `TIMEZONE`, `SUMMARY_PREFIX` at the top |
+| `tests/` | Parser tests, including a fixture built from the real slide for the week of Sept 28 |
+| `homework.ics`, `homework.json` | The published calendar and the assignment list behind it |
