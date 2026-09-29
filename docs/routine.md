@@ -1,56 +1,54 @@
 # Homework Routine runbook
 
-A scheduled Claude session runs this each weekday morning. It is the safety
-net for the rule-based parser: the teacher's slide layout may change, and a
-person reading the slide will get it right when the parser does not.
+A scheduled Claude session runs this each weekday morning. It is the only
+thing that updates the homework calendar. It reads the teacher's deck, turns
+it into `homework.ics`, and pushes to `main`, where GitHub Pages serves
+https://rramir16.github.io/reading-board/homework.ics for DAKboard.
 
 ## Inputs
 
 - The deck: https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-  It is shared as "Anyone with the link". Public exports need no login:
-  `.../export/pdf` and `.../export/txt`.
-- `deck/deck-layout.txt` and `deck/deck-bbox.html`: the latest snapshot the
-  GitHub Actions job committed (it runs every two hours on weekdays). Use
-  these when the session cannot reach docs.google.com.
-- `homework.json`: what the parser produced from that snapshot.
+  It is shared as "Anyone with the link", so the public export needs no
+  login. `scripts/fetch_deck.py` downloads it.
 - Rey is in 4th grade. Lines labelled for another grade ("5th: ...") are
-  not hers and must not appear on the calendar.
+  not hers and must not appear on the calendar. The parser already drops
+  them (`GRADE` in `scripts/homework_to_ics.py`).
 
 ## Steps
 
-1. `git fetch origin main && git checkout main && git pull`.
-2. Get the current slide, preferring a fresh copy:
+1. `git fetch origin main && git checkout main && git pull origin main`
+2. Fetch and lay out the deck:
    ```
-   python3 scripts/fetch_deck.py deck.txt deck.pdf \
-     && pip install -q pdfminer.six \
-     && python3 scripts/pdf_layout.py deck.pdf deck/deck-bbox.html
+   python3 scripts/fetch_deck.py deck.txt deck.pdf
+   pip install -q pdfminer.six
+   python3 scripts/pdf_layout.py deck.pdf deck-bbox.html
+   python3 scripts/pdf_layout.py deck.pdf --print
    ```
-   If the fetch fails because the network blocks docs.google.com, fall back
-   to the committed `deck/deck-bbox.html` and `deck/deck-layout.txt`, and
-   say so in the final summary.
-3. Run the parser: `python3 scripts/homework_to_ics.py deck/deck-bbox.html /tmp/hw.ics /tmp/hw.json`.
-4. Read the slide yourself (`deck/deck-layout.txt` keeps the columns) and
-   compare with `/tmp/hw.json`: every assignment under the right day, the
-   subject right, nothing missing, nothing from another grade, no template
-   or heading text.
-5. If the parser is right and `/tmp/hw.json` matches the committed
-   `homework.json`: stop. One-line reply, no commit.
-6. If the parser is wrong:
-   - write `deck/override.json` as
-     `{"deck_sha256": "<sha256sum of deck/deck-bbox.html>", "assignments": [{"due": "YYYY-MM-DD", "subject": "...", "text": "..."}]}`;
-   - `python3 scripts/homework_to_ics.py --from-json deck/override.json homework.ics`
-     and copy the assignments list to `homework.json`;
-   - if the fix is a small parser change, make it, add the current
-     `deck/deck-bbox.html` as a fixture with a test, and run
-     `python3 -m unittest discover -s tests`;
-   - commit and push to `main`. The Actions job honours the override until
-     the deck changes.
+   If the fetch fails, stop and say exactly what failed. Do not commit.
+3. Run the parser: `python3 scripts/homework_to_ics.py deck-bbox.html homework.ics homework.json`
+4. Read the `--print` dump yourself. Each slide lists its text boxes with
+   their horizontal position; the MONDAY..FRIDAY headers give each column's
+   position and date. Check the parser's `homework.json` against it: every
+   assignment under the right day, the subject right, nothing missing, no
+   template or heading text, nothing from another grade.
+5. If the parser is wrong, write the correct list yourself to
+   `homework.json` as `[{"due": "YYYY-MM-DD", "subject": "...", "text": "..."}]`
+   and regenerate with
+   `python3 scripts/homework_to_ics.py --from-json homework.json homework.ics`.
+   If the cause is a small parser change, make it, add the current
+   `deck-bbox.html` as a fixture under `tests/fixtures/` with a test, and run
+   `python3 -m unittest discover -s tests`.
+6. `git status`. If `homework.ics` or `homework.json` changed, commit and
+   push to `main`. The repository owner has authorised this Routine to push
+   to `main`. If the push is refused, push to `claude/homework-update` and
+   say so. If nothing changed, do not commit.
 7. Reply with one line: the number of assignments, the date range, and
-   whether an override was needed.
+   whether you had to correct the parser.
 
 ## Never
 
 - Publish an assignment you are unsure of; leave it out and say so.
-- Edit `index.html` or anything outside `scripts/`, `tests/`, `deck/`,
+- Commit `deck.pdf`, `deck.txt`, or `deck-bbox.html` (they are ignored).
+- Edit `index.html` or anything outside `scripts/`, `tests/`,
   `homework.ics`, `homework.json`.
 - Force-push or rewrite history.

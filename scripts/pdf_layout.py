@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Write a pdftotext -bbox-layout style file from a PDF, in pure Python.
 
-    python3 scripts/pdf_layout.py deck.pdf deck/deck-bbox.html
+    python3 scripts/pdf_layout.py deck.pdf deck-bbox.html
+    python3 scripts/pdf_layout.py deck.pdf --print      # readable dump per slide
 
 The GitHub Actions job uses poppler's pdftotext. A Claude Routine running
 in a cloud session has no apt, but can `pip install pdfminer.six`, so this
@@ -75,8 +76,29 @@ def convert(pdf_path):
     return "\n".join(out) + "\n"
 
 
+def dump(pdf_path):
+    """Print each slide's text boxes left to right, top to bottom, with
+    their horizontal position, so a reader can tell which day column a box
+    sits under."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(convert(pdf_path))
+    for n, page in enumerate(root.iter("{http://www.w3.org/1999/xhtml}page"), 1):
+        print(f"--- slide {n} (width {float(page.get('width')):.0f}pt) ---")
+        boxes = []
+        for block in page.iter("{http://www.w3.org/1999/xhtml}block"):
+            lines = []
+            for line in block.iter("{http://www.w3.org/1999/xhtml}line"):
+                lines.append(" ".join((w.text or "") for w in line.iter("{http://www.w3.org/1999/xhtml}word")))
+            boxes.append((float(block.get("yMin")), float(block.get("xMin")), float(block.get("xMax")), lines))
+        for y, x0, x1, lines in sorted(boxes, key=lambda b: (round(b[0] / 12), b[1])):
+            print(f"x {x0:4.0f}-{x1:4.0f}  y {y:4.0f}  | " + " / ".join(lines))
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) == 3 and sys.argv[2] == "--print":
+        dump(sys.argv[1])
+    elif len(sys.argv) == 3:
+        with open(sys.argv[2], "w", encoding="utf-8") as f:
+            f.write(convert(sys.argv[1]))
+    else:
         raise SystemExit(__doc__)
-    with open(sys.argv[2], "w", encoding="utf-8") as f:
-        f.write(convert(sys.argv[1]))
