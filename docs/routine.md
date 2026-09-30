@@ -20,7 +20,7 @@ https://rramir16.github.io/reading-board/homework.ics for DAKboard.
 2. Fetch and lay out the deck:
    ```
    python3 scripts/fetch_deck.py deck.txt deck.pdf
-   pip install -q pdfminer.six
+   pip install -q pdfminer.six cffi
    python3 scripts/pdf_layout.py deck.pdf deck-bbox.html
    python3 scripts/pdf_layout.py deck.pdf --print
    ```
