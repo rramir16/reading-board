@@ -44,4 +44,30 @@ URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
 CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
+BEGIN:VEVENT
+UID:6b353ad186467565d6c4@reading-board
+DTSTAMP:20260930T000000Z
+DTSTART;VALUE=DATE:20260930
+DTEND;VALUE=DATE:20261001
+SUMMARY:HW: Math: Arrays
+DESCRIPTION:Arrays\nhttps://docs.google.com/presentation/d/1381vHftL6aBWDcs
+ J-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:57c4f5cff01bb3dc1c4a@reading-board
+DTSTAMP:20260930T000000Z
+DTSTART;VALUE=DATE:20260930
+DTEND;VALUE=DATE:20261001
+SUMMARY:HW: Writing: Conflict Resolution
+DESCRIPTION:Conflict Resolution\nhttps://docs.google.com/presentation/d/138
+ 1vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
 END:VCALENDAR
