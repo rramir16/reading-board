@@ -94,6 +94,22 @@ class GridParserTests(unittest.TestCase):
         self.assertEqual({a["due"] for a in items}, {"2026-09-28", "2026-09-29"})
 
 
+class LigatureTests(unittest.TestCase):
+    """Deck of 9/30: pdfminer emits the "ﬂ" ligature in "Conflict"."""
+
+    def test_ligatures_are_normalised(self):
+        h.GRADE = "4th"
+        try:
+            xml = (GRID.parent / "deck-bbox-2026-09-30.html").read_text(encoding="utf-8")
+            items = h.parse_bbox(xml, today=dt.date(2026, 10, 1))
+        finally:
+            h.GRADE = None
+        got = [(a["due"], a["subject"], a["text"]) for a in items]
+        self.assertIn(("2026-09-30", "Writing", "Conflict Resolution"), got)
+        self.assertIn(("2026-09-30", "Math", "Arrays"), got)
+        self.assertFalse(any("\ufb02" in t or "\ufb01" in t for _, _, t in got))
+
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.items = h.parse_assignments(FIXTURE.read_text(), today=TODAY)

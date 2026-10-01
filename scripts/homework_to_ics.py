@@ -45,6 +45,7 @@ import hashlib
 import json
 import re
 import sys
+import unicodedata
 import xml.etree.ElementTree as ET
 
 DECK_URL = "https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit"
@@ -233,7 +234,8 @@ def _bbox_pages(xml_text):
 
 
 def _line_text(words):
-    return " ".join(w[0] for w in words)
+    # NFKC folds PDF ligatures (U+FB01 "ﬁ", U+FB02 "ﬂ") back to plain letters.
+    return unicodedata.normalize("NFKC", " ".join(w[0] for w in words))
 
 
 def _day_headers(words, today):
