@@ -23,5 +23,20 @@
     "due": "2026-09-30",
     "subject": "Writing",
     "text": "Conflict Resolution"
+  },
+  {
+    "due": "2026-10-01",
+    "subject": "Writing",
+    "text": "Listen & Learn"
+  },
+  {
+    "due": "2026-10-05",
+    "subject": "Math",
+    "text": "Prime and Composite"
+  },
+  {
+    "due": "2026-10-05",
+    "subject": "Writing",
+    "text": "Sentence Expansion"
   }
 ]
