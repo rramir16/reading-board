@@ -109,4 +109,17 @@ URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
 CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
+BEGIN:VEVENT
+UID:a03625bd076e816c5c64@reading-board
+DTSTAMP:20261006T000000Z
+DTSTART;VALUE=DATE:20261006
+DTEND;VALUE=DATE:20261007
+SUMMARY:HW: Writing: It’s Fall EXPLORE
+DESCRIPTION:It’s Fall EXPLORE\nhttps://docs.google.com/presentation/d/138
+ 1vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
 END:VCALENDAR
