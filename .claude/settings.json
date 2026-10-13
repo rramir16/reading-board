@@ -5,7 +5,7 @@
       "Bash(python3 scripts/pdf_layout.py:*)",
       "Bash(python3 scripts/homework_to_ics.py:*)",
       "Bash(python3 -m unittest discover -s tests)",
-      "Bash(pip install -q pdfminer.six)",
+      "Bash(python3 -m pip install -q pdfminer.six cffi)",
       "Bash(git fetch origin main)",
       "Bash(git pull origin main)",
       "Bash(git push -u origin main)",

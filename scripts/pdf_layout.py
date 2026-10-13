@@ -16,7 +16,7 @@ try:
     from pdfminer.high_level import extract_pages
     from pdfminer.layout import LAParams, LTChar, LTTextBox, LTTextLine
 except ImportError:
-    raise SystemExit("pdfminer.six is not installed: pip install pdfminer.six")
+    raise SystemExit("pdfminer.six is not installed: python3 -m pip install pdfminer.six cffi")
 
 
 def _words(line, page_h):
