@@ -264,7 +264,10 @@ def _day_headers(words, today):
 def _split_block(lines):
     """One text box -> [(subject, text, grade)], splitting at grade labels."""
     subject = None
-    if len(lines) > 1 and len(lines[0].split()) <= 2 and not lines[0].endswith(":") and not GRADE_RE.match(lines[0]):
+    # An all-caps first line ("INDIGENOUS / PEOPLE'S DAY") is a banner that
+    # wrapped, not a subject label like "Writing".
+    if (len(lines) > 1 and len(lines[0].split()) <= 2 and not lines[0].endswith(":")
+            and not GRADE_RE.match(lines[0]) and not lines[0].isupper()):
         subject, lines = lines[0].rstrip(":"), lines[1:]
     items = []
     for line in lines:

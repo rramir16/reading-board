@@ -110,6 +110,23 @@ class LigatureTests(unittest.TestCase):
         self.assertFalse(any("\ufb02" in t or "\ufb01" in t for _, _, t in got))
 
 
+class BannerTests(unittest.TestCase):
+    """Deck of 10/13: a wrapped all-caps holiday banner is not a subject."""
+
+    def test_all_caps_banner_keeps_its_first_line(self):
+        h.GRADE = "4th"
+        try:
+            xml = (GRID.parent / "deck-bbox-2026-10-13.html").read_text(encoding="utf-8")
+            items = h.parse_bbox(xml, today=dt.date(2026, 10, 13))
+        finally:
+            h.GRADE = None
+        got = [(a["due"], a["subject"], a["text"]) for a in items]
+        self.assertIn(("2026-10-12", None, "INDIGENOUS PEOPLE\u2019S DAY"), got)
+        self.assertIn(("2026-10-13", "Writing", "HHM Appositives"), got)
+        self.assertIn(("2026-10-13", "Math", "IM pg22-23"), got)
+        self.assertFalse(any(s == "INDIGENOUS" for _, s, _ in got))
+
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.items = h.parse_assignments(FIXTURE.read_text(), today=TODAY)

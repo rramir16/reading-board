@@ -1,15 +1,5 @@
 [
   {
-    "due": "2026-09-28",
-    "subject": "Math",
-    "text": "Finding Factors"
-  },
-  {
-    "due": "2026-09-28",
-    "subject": "Writing",
-    "text": "Celia Cruz Types of Sentences"
-  },
-  {
     "due": "2026-09-29",
     "subject": "Writing",
     "text": "Celia Cruz Conjunctions"
@@ -63,5 +53,20 @@
     "due": "2026-10-08",
     "subject": "Writing",
     "text": "It\u2019s Fall OBSERVE"
+  },
+  {
+    "due": "2026-10-12",
+    "subject": null,
+    "text": "INDIGENOUS PEOPLE\u2019S DAY"
+  },
+  {
+    "due": "2026-10-13",
+    "subject": "Math",
+    "text": "IM pg22-23"
+  },
+  {
+    "due": "2026-10-13",
+    "subject": "Writing",
+    "text": "HHM Appositives"
   }
 ]
