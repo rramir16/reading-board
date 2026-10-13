@@ -187,4 +187,17 @@ URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
 CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
+BEGIN:VEVENT
+UID:80a232ac086d1a35cfc8@reading-board
+DTSTAMP:20261013T000000Z
+DTSTART;VALUE=DATE:20261013
+DTEND;VALUE=DATE:20261014
+SUMMARY:HW: Writing: The Mural
+DESCRIPTION:The Mural\nhttps://docs.google.com/presentation/d/1381vHftL6aBW
+ DcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
 END:VCALENDAR

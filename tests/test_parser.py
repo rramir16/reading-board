@@ -125,6 +125,16 @@ class BannerTests(unittest.TestCase):
         self.assertIn(("2026-10-13", "Writing", "HHM Appositives"), got)
         self.assertIn(("2026-10-13", "Math", "IM pg22-23"), got)
         self.assertFalse(any(s == "INDIGENOUS" for _, s, _ in got))
+        self.assertIn(("2026-10-13", "Writing", "The Mural"), got)
+
+    def test_banner_does_not_inherit_a_subject(self):
+        h.GRADE = "4th"
+        try:
+            xml = (GRID.parent / "deck-bbox-2026-09-30.html").read_text(encoding="utf-8")
+            items = h.parse_bbox(xml, today=dt.date(2026, 10, 1))
+        finally:
+            h.GRADE = None
+        self.assertFalse(any(a["subject"] and "DAY" in a["text"] for a in items))
 
 
 class ParserTests(unittest.TestCase):

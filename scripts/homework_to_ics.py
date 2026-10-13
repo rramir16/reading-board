@@ -20,6 +20,8 @@ word's position. The grid parser (parse_bbox) then:
     header is nearest horizontally;
   * treats a box's first line as the subject when it is a single short
     label ("Writing", "Math") and the rest as the assignment text;
+  * gives an unlabelled box the subject of the labelled box above it in
+    the same column (all-caps banners like "PICTURE DAY" stay unlabelled);
   * splits a box into separate assignments at grade labels ("4th:", "5th:")
     and, when GRADE is set, keeps only that grade's line plus unlabelled ones.
 
@@ -313,11 +315,19 @@ def parse_bbox(xml_text, today=None):
             continue   # blank template slide, or a layout we do not understand
         header_top = min(c[2] for c in columns)
 
-        for xc, y0, y1, content in boxes:
+        last_subject = {}   # due date -> subject of the latest labelled box above
+        for xc, y0, y1, content in sorted(boxes, key=lambda b: b[1]):
             if y1 < header_top:
                 continue   # something above the day headers, like a title
             due = min(columns, key=lambda c: abs(c[0] - xc))[1]
             for subject, text, grade in _split_block(content):
+                # An unlabelled box under a labelled one in the same column
+                # ("The Mural" under "Writing / HHM Appositives") belongs to
+                # that subject. All-caps banners like PICTURE DAY stand alone.
+                if subject:
+                    last_subject[due] = subject
+                elif not text.isupper():
+                    subject = last_subject.get(due)
                 if GRADE and grade and grade != GRADE.lower():
                     continue
                 if not GRADE and grade:

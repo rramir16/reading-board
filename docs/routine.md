@@ -47,7 +47,11 @@ https://rramir16.github.io/reading-board/homework.ics for DAKboard.
 
 ## Never
 
-- Publish an assignment you are unsure of; leave it out and say so.
+- Leave out anything the teacher put in a day column of the homework chart.
+  Every box under a day goes on the calendar, even when it is unclear what
+  it is; if its subject is unclear, publish it without one and say so.
+  (Other grades' lines, the template slide and the title/headers are still
+  excluded.)
 - Commit `deck.pdf`, `deck.txt`, or `deck-bbox.html` (they are ignored).
 - Edit `index.html` or anything outside `scripts/`, `tests/`,
   `homework.ics`, `homework.json`.
