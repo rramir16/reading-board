@@ -6,19 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:ebca7b68a16fd35b7fdb@reading-board
-DTSTAMP:20260929T000000Z
-DTSTART;VALUE=DATE:20260929
-DTEND;VALUE=DATE:20260930
-SUMMARY:HW: Writing: Celia Cruz Conjunctions
-DESCRIPTION:Celia Cruz Conjunctions\nhttps://docs.google.com/presentation/d
- /1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:6b353ad186467565d6c4@reading-board
 DTSTAMP:20260930T000000Z
 DTSTART;VALUE=DATE:20260930
@@ -195,6 +182,32 @@ DTEND;VALUE=DATE:20261014
 SUMMARY:HW: Writing: The Mural
 DESCRIPTION:The Mural\nhttps://docs.google.com/presentation/d/1381vHftL6aBW
  DcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:560f02cfeb825b13ecac@reading-board
+DTSTAMP:20261014T000000Z
+DTSTART;VALUE=DATE:20261014
+DTEND;VALUE=DATE:20261015
+SUMMARY:HW: Math: IM pg 28-30
+DESCRIPTION:IM pg 28-30\nhttps://docs.google.com/presentation/d/1381vHftL6a
+ BWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:09a64e979814e53080d4@reading-board
+DTSTAMP:20261014T000000Z
+DTSTART;VALUE=DATE:20261014
+DTEND;VALUE=DATE:20261015
+SUMMARY:HW: Writing: Oscar de la Renta Appositives
+DESCRIPTION:Oscar de la Renta Appositives\nhttps://docs.google.com/presenta
+ tion/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
 CATEGORIES:Homework

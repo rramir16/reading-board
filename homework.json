@@ -1,10 +1,5 @@
 [
   {
-    "due": "2026-09-29",
-    "subject": "Writing",
-    "text": "Celia Cruz Conjunctions"
-  },
-  {
     "due": "2026-09-30",
     "subject": "Math",
     "text": "Arrays"
@@ -73,5 +68,15 @@
     "due": "2026-10-13",
     "subject": "Writing",
     "text": "The Mural"
+  },
+  {
+    "due": "2026-10-14",
+    "subject": "Math",
+    "text": "IM pg 28-30"
+  },
+  {
+    "due": "2026-10-14",
+    "subject": "Writing",
+    "text": "Oscar de la Renta Appositives"
   }
 ]
