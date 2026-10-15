@@ -1,15 +1,5 @@
 [
   {
-    "due": "2026-09-30",
-    "subject": "Math",
-    "text": "Arrays"
-  },
-  {
-    "due": "2026-09-30",
-    "subject": "Writing",
-    "text": "Conflict Resolution"
-  },
-  {
     "due": "2026-10-01",
     "subject": "Writing",
     "text": "Listen & Learn"
@@ -78,5 +68,10 @@
     "due": "2026-10-14",
     "subject": "Writing",
     "text": "Oscar de la Renta Appositives"
+  },
+  {
+    "due": "2026-10-15",
+    "subject": "Writing",
+    "text": "The Garden Where Everyone Belonged"
   }
 ]
