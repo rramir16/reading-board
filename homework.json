@@ -1,10 +1,5 @@
 [
   {
-    "due": "2026-10-06",
-    "subject": "Writing",
-    "text": "It\u2019s Fall EXPLORE"
-  },
-  {
     "due": "2026-10-07",
     "subject": "Math",
     "text": "Venn Diagram Factors"
@@ -63,5 +58,15 @@
     "due": "2026-10-20",
     "subject": null,
     "text": "NO HOMEWORK"
+  },
+  {
+    "due": "2026-10-21",
+    "subject": "Math",
+    "text": "IM page 35"
+  },
+  {
+    "due": "2026-10-21",
+    "subject": "Writing",
+    "text": "Dara Torres Appositives"
   }
 ]
