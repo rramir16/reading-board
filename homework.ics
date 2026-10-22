@@ -6,32 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:d8e0bc6c2e9dd649c439@reading-board
-DTSTAMP:20261007T000000Z
-DTSTART;VALUE=DATE:20261007
-DTEND;VALUE=DATE:20261008
-SUMMARY:HW: Math: Venn Diagram Factors
-DESCRIPTION:Venn Diagram Factors\nhttps://docs.google.com/presentation/d/13
- 81vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:b892cb03ea62105c3cfb@reading-board
-DTSTAMP:20261007T000000Z
-DTSTART;VALUE=DATE:20261007
-DTEND;VALUE=DATE:20261008
-SUMMARY:HW: Writing: Subordinating Conjunctions
-DESCRIPTION:Subordinating Conjunctions\nhttps://docs.google.com/presentatio
- n/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:342e089d8c4a4fd6eb76@reading-board
 DTSTAMP:20261008T000000Z
 DTSTART;VALUE=DATE:20261008
@@ -175,10 +149,23 @@ CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:9b9e2f316a35d95f5f45@reading-board
-DTSTAMP:20261021T000000Z
-DTSTART;VALUE=DATE:20261021
-DTEND;VALUE=DATE:20261022
+UID:20cfe0cbb12c37d87175@reading-board
+DTSTAMP:20261022T000000Z
+DTSTART;VALUE=DATE:20261022
+DTEND;VALUE=DATE:20261023
+SUMMARY:HW: Math: IM page 35
+DESCRIPTION:IM page 35\nhttps://docs.google.com/presentation/d/1381vHftL6aB
+ WDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:a4ad8cb35db944bf0675@reading-board
+DTSTAMP:20261022T000000Z
+DTSTART;VALUE=DATE:20261022
+DTEND;VALUE=DATE:20261023
 SUMMARY:HW: Writing: Dara Torres Appositives
 DESCRIPTION:Dara Torres Appositives\nhttps://docs.google.com/presentation/d
  /1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
