@@ -1,10 +1,5 @@
 [
   {
-    "due": "2026-10-12",
-    "subject": null,
-    "text": "INDIGENOUS PEOPLE\u2019S DAY"
-  },
-  {
     "due": "2026-10-13",
     "subject": "Math",
     "text": "IM pg22-23"
@@ -58,5 +53,10 @@
     "due": "2026-10-26",
     "subject": "Thematics",
     "text": "Impact Reflection"
+  },
+  {
+    "due": "2026-10-27",
+    "subject": "Thematics",
+    "text": "New Statue Reflection"
   }
 ]

@@ -6,19 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:11f5275bdcc84591d03b@reading-board
-DTSTAMP:20261012T000000Z
-DTSTART;VALUE=DATE:20261012
-DTEND;VALUE=DATE:20261013
-SUMMARY:HW: INDIGENOUS PEOPLE’S DAY
-DESCRIPTION:INDIGENOUS PEOPLE’S DAY\nhttps://docs.google.com/presentation
- /d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:6dc4ec38ac9776fca709@reading-board
 DTSTAMP:20261013T000000Z
 DTSTART;VALUE=DATE:20261013
@@ -156,6 +143,19 @@ DTEND;VALUE=DATE:20261027
 SUMMARY:HW: Thematics: Impact Reflection
 DESCRIPTION:Impact Reflection\nhttps://docs.google.com/presentation/d/1381v
  HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:a204ff56bbb85cf2311d@reading-board
+DTSTAMP:20261027T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:HW: Thematics: New Statue Reflection
+DESCRIPTION:New Statue Reflection\nhttps://docs.google.com/presentation/d/1
+ 381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
 CATEGORIES:Homework
