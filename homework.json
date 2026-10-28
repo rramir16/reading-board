@@ -1,20 +1,5 @@
 [
   {
-    "due": "2026-10-13",
-    "subject": "Math",
-    "text": "IM pg22-23"
-  },
-  {
-    "due": "2026-10-13",
-    "subject": "Writing",
-    "text": "HHM Appositives"
-  },
-  {
-    "due": "2026-10-13",
-    "subject": "Writing",
-    "text": "The Mural"
-  },
-  {
     "due": "2026-10-14",
     "subject": "Math",
     "text": "IM pg 28-30"
@@ -58,5 +43,10 @@
     "due": "2026-10-27",
     "subject": "Thematics",
     "text": "New Statue Reflection"
+  },
+  {
+    "due": "2026-10-28",
+    "subject": "Spelling",
+    "text": "Week 1 Homework 1"
   }
 ]
