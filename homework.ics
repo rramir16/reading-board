@@ -6,32 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:560f02cfeb825b13ecac@reading-board
-DTSTAMP:20261014T000000Z
-DTSTART;VALUE=DATE:20261014
-DTEND;VALUE=DATE:20261015
-SUMMARY:HW: Math: IM pg 28-30
-DESCRIPTION:IM pg 28-30\nhttps://docs.google.com/presentation/d/1381vHftL6a
- BWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:09a64e979814e53080d4@reading-board
-DTSTAMP:20261014T000000Z
-DTSTART;VALUE=DATE:20261014
-DTEND;VALUE=DATE:20261015
-SUMMARY:HW: Writing: Oscar de la Renta Appositives
-DESCRIPTION:Oscar de la Renta Appositives\nhttps://docs.google.com/presenta
- tion/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:026d1e18816ddab22f9b@reading-board
 DTSTAMP:20261015T000000Z
 DTSTART;VALUE=DATE:20261015
