@@ -1,10 +1,5 @@
 [
   {
-    "due": "2026-10-15",
-    "subject": "Writing",
-    "text": "The Garden Where Everyone Belonged"
-  },
-  {
     "due": "2026-10-20",
     "subject": null,
     "text": "NO HOMEWORK"
@@ -38,5 +33,10 @@
     "due": "2026-10-28",
     "subject": "Spelling",
     "text": "Week 1 Homework 1"
+  },
+  {
+    "due": "2026-10-29",
+    "subject": "Spelling",
+    "text": "Week 1 Homework 2"
   }
 ]

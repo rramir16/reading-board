@@ -6,19 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:026d1e18816ddab22f9b@reading-board
-DTSTAMP:20261015T000000Z
-DTSTART;VALUE=DATE:20261015
-DTEND;VALUE=DATE:20261016
-SUMMARY:HW: Writing: The Garden Where Everyone Belonged
-DESCRIPTION:The Garden Where Everyone Belonged\nhttps://docs.google.com/pre
- sentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:5c471307f291f5e51228@reading-board
 DTSTAMP:20261020T000000Z
 DTSTART;VALUE=DATE:20261020
@@ -103,6 +90,19 @@ DTSTART;VALUE=DATE:20261028
 DTEND;VALUE=DATE:20261029
 SUMMARY:HW: Spelling: Week 1 Homework 1
 DESCRIPTION:Week 1 Homework 1\nhttps://docs.google.com/presentation/d/1381v
+ HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:4bb30d889770d5cff2a2@reading-board
+DTSTAMP:20261029T000000Z
+DTSTART;VALUE=DATE:20261029
+DTEND;VALUE=DATE:20261030
+SUMMARY:HW: Spelling: Week 1 Homework 2
+DESCRIPTION:Week 1 Homework 2\nhttps://docs.google.com/presentation/d/1381v
  HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
