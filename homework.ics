@@ -109,4 +109,43 @@ URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
 CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
+BEGIN:VEVENT
+UID:42331360335b26157cdc@reading-board
+DTSTAMP:20261102T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:HW: Math: Finish Review Packet
+DESCRIPTION:Finish Review Packet\nhttps://docs.google.com/presentation/d/13
+ 81vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:17feb37e891239a99076@reading-board
+DTSTAMP:20261102T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:HW: Spelling: Week 1 Homework 3
+DESCRIPTION:Week 1 Homework 3\nhttps://docs.google.com/presentation/d/1381v
+ HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:dad29bfd852f2d4b6e12@reading-board
+DTSTAMP:20261102T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:HW: Writing: Rules of Capitalization
+DESCRIPTION:Rules of Capitalization\nhttps://docs.google.com/presentation/d
+ /1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
 END:VCALENDAR
