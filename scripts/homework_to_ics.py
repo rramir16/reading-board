@@ -248,8 +248,9 @@ def _day_headers(words, today):
         text, x0, x1 = words[i]
         m = DAY_WORD_RE.match(text)
         if not m:
-            i += 1
-            continue
+            # Headers start the line and run contiguously. A day word after
+            # other text ("5th: Taco Tuesday") is part of an assignment.
+            break
         weekday = parse_weekday(text)
         date = None
         if i + 1 < len(words) and not DAY_WORD_RE.match(words[i + 1][0]):

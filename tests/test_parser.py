@@ -199,5 +199,27 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(a, b, "output must not depend on when it was generated")
 
 
+class DayWordInsideAssignmentTests(unittest.TestCase):
+    """'5th: Taco Tuesday' is a 5th-grade assignment, not a TUESDAY header."""
+
+    GRID = pathlib.Path(__file__).parent / "fixtures" / "deck-bbox-2026-11-03.html"
+
+    def setUp(self):
+        h.GRADE = "4th"
+
+    def tearDown(self):
+        h.GRADE = None
+
+    def test_fifth_grade_line_with_day_word_is_dropped(self):
+        items = h.parse_bbox(self.GRID.read_text(encoding="utf-8"), today=dt.date(2026, 11, 3))
+        week = [(a["due"], a["subject"], a["text"]) for a in items if a["due"] >= "2026-11-02"]
+        self.assertEqual(week, [
+            ("2026-11-02", "Math", "Finish Review Packet"),
+            ("2026-11-02", "Spelling", "Week 1 Homework 3"),
+            ("2026-11-02", "Writing", "Rules of Capitalization"),
+            ("2026-11-03", "Spelling", "Week 1 Homework 4"),
+        ])
+
+
 if __name__ == "__main__":
     unittest.main()
