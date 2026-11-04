@@ -1,10 +1,5 @@
 [
   {
-    "due": "2026-10-20",
-    "subject": null,
-    "text": "NO HOMEWORK"
-  },
-  {
     "due": "2026-10-21",
     "subject": "Math",
     "text": "IM page 35"
@@ -58,5 +53,10 @@
     "due": "2026-11-03",
     "subject": "Spelling",
     "text": "Week 1 Homework 4"
+  },
+  {
+    "due": "2026-11-04",
+    "subject": "Spelling",
+    "text": "Week 2 Homework 1"
   }
 ]
