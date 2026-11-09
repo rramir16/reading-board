@@ -148,4 +148,30 @@ URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
 CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
+BEGIN:VEVENT
+UID:98438b2e232559450ea1@reading-board
+DTSTAMP:20261109T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:HW: Math: Pages 45-46
+DESCRIPTION:Pages 45-46\nhttps://docs.google.com/presentation/d/1381vHftL6a
+ BWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:ee9967a77bd3a357eb40@reading-board
+DTSTAMP:20261109T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:HW: Writing: It’s Fall Connect
+DESCRIPTION:It’s Fall Connect\nhttps://docs.google.com/presentation/d/138
+ 1vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
 END:VCALENDAR
