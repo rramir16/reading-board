@@ -1,10 +1,5 @@
 [
   {
-    "due": "2026-10-27",
-    "subject": "Thematics",
-    "text": "New Statue Reflection"
-  },
-  {
     "due": "2026-10-28",
     "subject": "Spelling",
     "text": "Week 1 Homework 1"
@@ -58,5 +53,15 @@
     "due": "2026-11-09",
     "subject": "Writing",
     "text": "It\u2019s Fall Connect"
+  },
+  {
+    "due": "2026-11-11",
+    "subject": null,
+    "text": "NO SCHOOL VETERANS DAY"
+  },
+  {
+    "due": "2026-11-17",
+    "subject": "Literature Circle",
+    "text": "Chapters 1-6 and Questions DUE"
   }
 ]
