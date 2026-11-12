@@ -6,19 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:967d01b57b001eb4fb90@reading-board
-DTSTAMP:20261028T000000Z
-DTSTART;VALUE=DATE:20261028
-DTEND;VALUE=DATE:20261029
-SUMMARY:HW: Spelling: Week 1 Homework 1
-DESCRIPTION:Week 1 Homework 1\nhttps://docs.google.com/presentation/d/1381v
- HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:4bb30d889770d5cff2a2@reading-board
 DTSTAMP:20261029T000000Z
 DTSTART;VALUE=DATE:20261029
@@ -156,6 +143,45 @@ DTEND;VALUE=DATE:20261112
 SUMMARY:HW: NO SCHOOL VETERANS DAY
 DESCRIPTION:NO SCHOOL VETERANS DAY\nhttps://docs.google.com/presentation/d/
  1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:cbc64f676bcf193b578a@reading-board
+DTSTAMP:20261112T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:HW: Math: Page 48-50
+DESCRIPTION:Page 48-50\nhttps://docs.google.com/presentation/d/1381vHftL6aB
+ WDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:115f1bfa3df52b81d694@reading-board
+DTSTAMP:20261112T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:HW: Spelling: Week 2 Homework 3
+DESCRIPTION:Week 2 Homework 3\nhttps://docs.google.com/presentation/d/1381v
+ HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:9a3088ae5b7aaa43d5a9@reading-board
+DTSTAMP:20261112T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:HW: Writing: Fixing Capitalization
+DESCRIPTION:Fixing Capitalization\nhttps://docs.google.com/presentation/d/1
+ 381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
 CATEGORIES:Homework
