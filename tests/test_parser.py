@@ -221,5 +221,32 @@ class DayWordInsideAssignmentTests(unittest.TestCase):
         ])
 
 
+class MixedBoxTests(unittest.TestCase):
+    """Deck of 11/13: a box holding two subjects, and a box with its own due date."""
+
+    GRID = pathlib.Path(__file__).parent / "fixtures" / "deck-bbox-2026-11-13.html"
+
+    def tearDown(self):
+        h.GRADE = None
+
+    def parse(self, grade):
+        h.GRADE = grade
+        return [(a["due"], a["subject"], a["text"])
+                for a in h.parse_bbox(self.GRID.read_text(encoding="utf-8"), today=dt.date(2026, 11, 13))]
+
+    def test_second_subject_label_starts_new_item(self):
+        got = self.parse("4th")
+        self.assertIn(("2026-11-12", "Spelling", "Week 2 Homework 3"), got)
+        self.assertNotIn(("2026-11-12", "Spelling", "Week 2 Homework 3 Vocab"), got)
+        self.assertIn(("2026-11-12", "Vocab", "5th: Complete Lesson 3"), self.parse(None))
+
+    def test_due_phrase_in_box_sets_date_and_is_not_a_header(self):
+        got = self.parse("4th")
+        self.assertIn(("2026-11-17", "Literature Circle",
+                       "Chapters 1-6 and Questions DUE TUESDAY 11/17"), got)
+        self.assertIn(("2026-11-12", "Writing", "Fixing Capitalization"), got)
+        self.assertEqual(len([g for g in got if g[0] >= "2026-11-09"]), 7)
+
+
 if __name__ == "__main__":
     unittest.main()

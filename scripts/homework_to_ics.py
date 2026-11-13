@@ -203,6 +203,11 @@ def parse_assignments(text, today=None):
 
 DAY_WORD_RE = re.compile(r"^(?P<wd>mon|tues|wednes|thurs|fri)day[.,:]?$", re.I)
 PLACEHOLDER_RE = re.compile(r"^[/\-_:]+$")
+# A second subject label inside one box ("Spelling / 4th: ... / Vocab /
+# 5th: ...") starts a new item. Only known subjects count, so a wrapped
+# word like "Packet" before "5th:" stays with the line above.
+SUBJECTS = {"math", "writing", "vocab", "spelling", "reading", "thematics",
+            "science", "social studies", "literature circle"}
 
 
 def _local(tag):
@@ -273,7 +278,11 @@ def _split_block(lines):
             and not GRADE_RE.match(lines[0]) and not lines[0].isupper()):
         subject, lines = lines[0].rstrip(":"), lines[1:]
     items = []
-    for line in lines:
+    for i, line in enumerate(lines):
+        nxt = lines[i + 1] if i + 1 < len(lines) else ""
+        if items and line.rstrip(":").lower() in SUBJECTS and GRADE_RE.match(nxt):
+            subject = line.rstrip(":")
+            continue
         gm = GRADE_RE.match(line)
         if gm:
             items.append([subject, gm.group("text").strip(), gm.group("grade").lower()])
@@ -298,7 +307,9 @@ def parse_bbox(xml_text, today=None):
                     if d:
                         week_monday = d - dt.timedelta(days=d.weekday())
                     continue
-                hs = _day_headers(words, today)
+                # A day header inside a box that already has text ("Questions
+                # DUE / TUESDAY 11/17") is part of that box, not a column.
+                hs = [] if content else _day_headers(words, today)
                 if hs:
                     headers.extend((xc, date, wd, y0, y1) for xc, date, wd in hs)
                     continue
@@ -333,7 +344,11 @@ def parse_bbox(xml_text, today=None):
                     continue
                 if not GRADE and grade:
                     text = f"{grade}: {text}"
-                found.append({"due": due.isoformat(), "subject": subject, "text": text})
+                item_due = due
+                dm = DUE_RE.search(text)
+                if dm and parse_date(dm.group("rest"), today):
+                    item_due = parse_date(dm.group("rest"), today)
+                found.append({"due": item_due.isoformat(), "subject": subject, "text": text})
 
     lo, hi = today - dt.timedelta(days=PAST_DAYS), today + dt.timedelta(days=FUTURE_DAYS)
     seen, kept = set(), []

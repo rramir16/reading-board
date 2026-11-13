@@ -6,19 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:4bb30d889770d5cff2a2@reading-board
-DTSTAMP:20261029T000000Z
-DTSTART;VALUE=DATE:20261029
-DTEND;VALUE=DATE:20261030
-SUMMARY:HW: Spelling: Week 1 Homework 2
-DESCRIPTION:Week 1 Homework 2\nhttps://docs.google.com/presentation/d/1381v
- HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:42331360335b26157cdc@reading-board
 DTSTAMP:20261102T000000Z
 DTSTART;VALUE=DATE:20261102
@@ -188,13 +175,13 @@ CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:b3e28f292bc258db5565@reading-board
+UID:a0978321828601a544c8@reading-board
 DTSTAMP:20261117T000000Z
 DTSTART;VALUE=DATE:20261117
 DTEND;VALUE=DATE:20261118
-SUMMARY:HW: Literature Circle: Chapters 1-6 and Questions DUE
-DESCRIPTION:Chapters 1-6 and Questions DUE\nhttps://docs.google.com/present
- ation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+SUMMARY:HW: Literature Circle: Chapters 1-6 and Questions DUE TUESDAY 11/17
+DESCRIPTION:Chapters 1-6 and Questions DUE TUESDAY 11/17\nhttps://docs.goog
+ le.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
 CATEGORIES:Homework
