@@ -175,6 +175,32 @@ CATEGORIES:Homework
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
+UID:3975bb49e556448d7076@reading-board
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261116
+DTEND;VALUE=DATE:20261117
+SUMMARY:HW: Math: Division Sheet
+DESCRIPTION:Division Sheet\nhttps://docs.google.com/presentation/d/1381vHft
+ L6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:4d037e54b7ada62566b4@reading-board
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261116
+DTEND;VALUE=DATE:20261117
+SUMMARY:HW: Writing: Season\, holidays\, and directions
+DESCRIPTION:Season\, holidays\, and directions\nhttps://docs.google.com/pre
+ sentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
 UID:a0978321828601a544c8@reading-board
 DTSTAMP:20261117T000000Z
 DTSTART;VALUE=DATE:20261117
