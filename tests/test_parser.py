@@ -248,5 +248,26 @@ class MixedBoxTests(unittest.TestCase):
         self.assertEqual(len([g for g in got if g[0] >= "2026-11-09"]), 7)
 
 
+class InlineGradeNoteTests(unittest.TestCase):
+    """Deck of 11/17: a shared line carrying another grade's note."""
+
+    GRID = pathlib.Path(__file__).parent / "fixtures" / "deck-bbox-2026-11-17.html"
+
+    def tearDown(self):
+        h.GRADE = None
+
+    def parse(self, grade):
+        h.GRADE = grade
+        return [(a["due"], a["subject"], a["text"])
+                for a in h.parse_bbox(self.GRID.read_text(encoding="utf-8"), today=dt.date(2026, 11, 17))]
+
+    def test_other_grade_inline_note_is_dropped(self):
+        got = self.parse("4th")
+        self.assertIn(("2026-11-16", "Writing", "Season, holidays, and directions"), got)
+        self.assertIn(("2026-11-17", "Music", "P. 11 Juba, Triple Meter Trip, Humpty Dumpty."), got)
+        self.assertIn(("2026-11-16", "Writing", "Season, holidays, and directions (5th: Choose 4)"),
+                      self.parse(None))
+
+
 if __name__ == "__main__":
     unittest.main()

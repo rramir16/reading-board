@@ -57,6 +57,8 @@ SUMMARY_PREFIX = "HW"
 PAST_DAYS, FUTURE_DAYS = 14, 220        # window of events kept in the file
 GRADE = "4th"                           # keep only this grade's lines; None keeps all
 GRADE_RE = re.compile(r"^(?P<grade>\d(?:st|nd|rd|th))\s*[:\-\u2013]\s*(?P<text>.*)$", re.I)
+# An inline note for one grade inside a shared line: "(5th: Choose 4)".
+INLINE_GRADE_RE = re.compile(r"\s*\((?P<grade>\d(?:st|nd|rd|th))\s*[:\-\u2013][^)]*\)", re.I)
 DAY_HEADER_RE = re.compile(r"^(?P<wd>mon|tues|wednes|thurs|fri)day\b\.?\s*(?P<rest>.*)$", re.I)
 
 MONTHS = {m: i for i, m in enumerate(
@@ -342,6 +344,13 @@ def parse_bbox(xml_text, today=None):
                     subject = last_subject.get(due)
                 if GRADE and grade and grade != GRADE.lower():
                     continue
+                if GRADE:
+                    # Drop another grade's inline note from a shared line.
+                    text = INLINE_GRADE_RE.sub(
+                        lambda m: m.group(0) if m.group("grade").lower() == GRADE.lower() else "",
+                        text).strip()
+                    if not text:
+                        continue
                 if not GRADE and grade:
                     text = f"{grade}: {text}"
                 item_due = due
