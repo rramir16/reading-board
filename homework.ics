@@ -6,19 +6,6 @@ METHOD:PUBLISH
 X-WR-CALNAME:Homework
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
-UID:00eb4f14137fda7ccefb@reading-board
-DTSTAMP:20261103T000000Z
-DTSTART;VALUE=DATE:20261103
-DTEND;VALUE=DATE:20261104
-SUMMARY:HW: Spelling: Week 1 Homework 4
-DESCRIPTION:Week 1 Homework 4\nhttps://docs.google.com/presentation/d/1381v
- HftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
-URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
- sVW9mPdq-Lpw/edit
-CATEGORIES:Homework
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:65c9941c9f6bf866d690@reading-board
 DTSTAMP:20261104T000000Z
 DTSTART;VALUE=DATE:20261104
@@ -182,6 +169,33 @@ DTEND;VALUE=DATE:20261118
 SUMMARY:HW: Music: P. 11 Juba\, Triple Meter Trip\, Humpty Dumpty.
 DESCRIPTION:P. 11 Juba\, Triple Meter Trip\, Humpty Dumpty.\nhttps://docs.g
  oogle.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:a8e4ff2d57219d7ca4a6@reading-board
+DTSTAMP:20261118T000000Z
+DTSTART;VALUE=DATE:20261118
+DTEND;VALUE=DATE:20261119
+SUMMARY:HW: Math: Division Search
+DESCRIPTION:Division Search\nhttps://docs.google.com/presentation/d/1381vHf
+ tL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
+URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
+ sVW9mPdq-Lpw/edit
+CATEGORIES:Homework
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:b9664d4f4f363a332438@reading-board
+DTSTAMP:20261124T000000Z
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+SUMMARY:HW: Literature Circle: Chapters 7-11 and Questions DUE TUESDAY 11/2
+ 4
+DESCRIPTION:Chapters 7-11 and Questions DUE TUESDAY 11/24\nhttps://docs.goo
+ gle.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMlsVW9mPdq-Lpw/edit
 URL:https://docs.google.com/presentation/d/1381vHftL6aBWDcsJ-fN1iB8jrZOLwMl
  sVW9mPdq-Lpw/edit
 CATEGORIES:Homework

@@ -269,5 +269,27 @@ class InlineGradeNoteTests(unittest.TestCase):
                       self.parse(None))
 
 
+class GradeLabelWithoutColonTests(unittest.TestCase):
+    """Deck of 11/18: "5th The note “D” songs" has no colon after the grade."""
+
+    GRID = pathlib.Path(__file__).parent / "fixtures" / "deck-bbox-2026-11-18.html"
+
+    def tearDown(self):
+        h.GRADE = None
+
+    def parse(self, grade):
+        h.GRADE = grade
+        return [(a["due"], a["subject"], a["text"])
+                for a in h.parse_bbox(self.GRID.read_text(encoding="utf-8"), today=dt.date(2026, 11, 18))]
+
+    def test_fifth_grade_label_without_colon_is_dropped(self):
+        got = self.parse("4th")
+        self.assertFalse([g for g in got if g[0] == "2026-11-19"])
+        self.assertIn(("2026-11-18", "Math", "Division Search"), got)
+        self.assertIn(("2026-11-24", "Literature Circle",
+                       "Chapters 7-11 and Questions DUE TUESDAY 11/24"), got)
+        self.assertIn(("2026-11-19", "Music", "5th: The note “D” songs"), self.parse(None))
+
+
 if __name__ == "__main__":
     unittest.main()

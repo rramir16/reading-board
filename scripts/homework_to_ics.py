@@ -56,7 +56,9 @@ CAL_NAME = "Homework"
 SUMMARY_PREFIX = "HW"
 PAST_DAYS, FUTURE_DAYS = 14, 220        # window of events kept in the file
 GRADE = "4th"                           # keep only this grade's lines; None keeps all
-GRADE_RE = re.compile(r"^(?P<grade>\d(?:st|nd|rd|th))\s*[:\-\u2013]\s*(?P<text>.*)$", re.I)
+# The separator is usually a colon, but the teacher sometimes drops it
+# ("5th The note "D" songs").
+GRADE_RE = re.compile(r"^(?P<grade>\d(?:st|nd|rd|th))(?:\s*[:\-\u2013]\s*|\s+)(?P<text>.*)$", re.I)
 # An inline note for one grade inside a shared line: "(5th: Choose 4)".
 INLINE_GRADE_RE = re.compile(r"\s*\((?P<grade>\d(?:st|nd|rd|th))\s*[:\-\u2013][^)]*\)", re.I)
 DAY_HEADER_RE = re.compile(r"^(?P<wd>mon|tues|wednes|thurs|fri)day\b\.?\s*(?P<rest>.*)$", re.I)
